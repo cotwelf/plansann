@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,8 +9,12 @@ import { Test } from "../views/test"
 import { Home } from "../views/home"
 import logo from '../logo.svg'
 import '../App.scss'
+import store from "../store"
 
 function App() {
+  useEffect(() => {
+    store.dispatch({ type: 'HIDE_MODAL'})
+  }, [])
   return (
     <Router>
       <Switch>

@@ -1,4 +1,4 @@
-import { ToggleModal } from "./modal"
+import { Modal } from "./modal"
 import { TaskItem } from "./task"
 
-export {ToggleModal, TaskItem}
+export {Modal, TaskItem}
