@@ -1,0 +1,33 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended",
+        "tslint-eslint-rules",
+        "tslint-react"
+    ],
+    "jsRules": {},
+    "rules": {
+        "semicolon": [ true, "never" ],
+        "no-console": true,
+        "quotemark": [ true, "single", "avoid-escape", "jsx-double" ],
+        "radix": false,
+        "align": [ true, "members" ],
+        "whitespace": [ true, "check-branch", "check-decl", "check-operator",
+            "check-separator", "check-type", "check-typecast",
+            "check-rest-spread" ],
+        "ter-indent": [ true, 2, {
+            "CallExpression": { "arguments": 1 },
+            "FunctionDeclaration": { "parameters": 2 }
+        } ],
+        "ter-arrow-spacing": [ true ],
+        "no-extra-semi": true,
+        "object-curly-spacing": "always",
+        "object-literal-sort-keys": [ true, "match-declaration-order" ],
+        "ordered-imports": [ true, { "import-sources-order": "lowercase-last", "named-imports-order": "lowercase-last"} ],
+        "interface-over-type-literal": false,
+        "space-within-parens": [ true, 0 ],
+        "member-access": false,
+        "jsx-no-multiline-js": false
+    },
+    "rulesDirectory": []
+}

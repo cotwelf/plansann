@@ -5,8 +5,8 @@ import {
   Route,
   Link
 } from "react-router-dom"
-import { Test } from "../components/test"
-import { Home } from "../components/home"
+import { Test } from "../views/test"
+import { Home } from "../views/home"
 import logo from '../logo.svg'
 import '../App.scss'
 
