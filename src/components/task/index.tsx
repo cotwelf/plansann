@@ -9,7 +9,7 @@ export const TaskItem: React.FC<any> = ({ status, name, per, unit }) => {
     if (typeof e.target.value === 'number' && e.target.value < 999) {
       setDone(e.target.value)
     } else {
-      setDone(0)
+      // setDone(0)
     }
   }
   const doTask = () => {
