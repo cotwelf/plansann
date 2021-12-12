@@ -1,23 +1,41 @@
 # database 总览
-
+> 【可不可变】一般指是否会根据计划状态进行更新。【可不可修改】一般指用户可以在客户端手动修改该字段为期望值。
+## projects
+所有【创建过】的项目。如英语、前端之类的，项目内可以创建多个计划。
+|字段|举例|类型|长度限制|描述|表关联|备注|
+|----|----|----|----|----|----|----|
+|id|1|number||project 的唯一标识，不可变，不可修改||项目中可以有多个 plan，比如【英语】project 中可以有 【背单词】和【阅读】plan|
+|name|`英语`|string|1-10|不可变，可修改。||项目的名称(允许重复)|
+|create_at|1639301729|timestamp||默认记录创建时间。不可变，不可修改。||项目创建时间|
+|end_at|1639301729|timestamp||不可变，now <= end_at 时可以修改。||项目终止时间|
+|status|1|number|1,10|默认值 1。可变，不可修改。||1，进行中（当前时间 <= 项目终止时间），10：已结束（当前时间 > 终止时间）
 ## plans
 所有【创建过】的计划的信息
-|字段|举例|类型|长度限制|描述|表关联|
-|----|----|----|----|----|----|
-|id|1|number||唯一标识|plans.id = |
-|name|`背单词`|string|1-10|计划的名称(允许重复)||
-|per|30|number|4|每天需要完成的任务量|!plans.per && plans.per <= plans.total||
-|unit|`个`|string|1-10|任务的单位||
-|total|100|number|4|计划的总任务量||
-|remain|70|number|4|剩余任务量|plans.per <= plans.total||
-|create_at|2021-12-12|||计划创建时间||
-|udpate_at|2021-12-12 15:20:00|||计划更新时间||
-|start_at|2021-12-13|||计划开始时间||
-|finish_at|2022-12-13|||预计结束时间（即创建时填写的结束时间，不变，仅作为记录。若 finish_at 当天 status 为 0 或 1，status 需置为 -1，且更新 end_at）||
-|end_at|2022-1-13|||计划结束时间（包括自然结束，提前完成，提前终止）|
-|status|1|number||0：未开始，1：进行中，10：已完成，-1：已终止||
+|字段|举例|类型|长度限制|描述|表关联|备注|
+|----|----|----|----|----|----|----|
+|id|1|number||不可变，不可修改<br />plan 的唯一标识。||一个 plan 下有一个或多个 records|plans.id = records.plan_id|
+|project_id|1|number||不可变，不可修改|plans.project_id = projects.id|关联的 project，若无，则为普通计划，不会随 projects 的变化而变化|
+|loop|0|number||不可变，可修改||0：与 total 有关的非习惯养成任务，比如 30 天内背 300 个单词，1：习惯养成任务（如每日完成 30 个单词，与 finish_at 有关|
+|name|`背单词`|string|1-10|不可变，可修改||计划的名称(允许重复)|
+|per|30|number|4|可变（plans.loop === 0），可修改（plans.loop === 1）|!plans.per && plans.per <= plans.total|每天需要完成的任务量|
+|unit|`个`|string|1-10|不可变，可修改||任务的单位|
+|type|5|number|0-7|不可变，可修改||1-7：每周完成几天，0：某日完成（一次性计划）。修改后需重新计算当前 plan 的 per，并更新 records 相关信息。|
+|total|100|number|4|不可变，可修改（plans.loop === 0）||计划的总任务量，修改后需重新计算当前 plan 的 per，并更新 records 相关信息。|
+|remain|70|number|4|可变，不可修改|plans.per <= plans.total||剩余任务量|
+|create_at|1639301729|timestamp||不可变，不可修改||计划创建时间|
+|udpate_at|1639301729|timestamp||可变，不可修改||计划更新时间|
+|start_at|1639301729|timestamp||不可变，可修改||计划开始时间|
+|finish_at|1639301729|timestamp||不可变，可修改||预计结束时间（填写时 finish_at >= end_at。若 now < finish_at && status === （0 || 1），status 需置为 -1，且更新 end_at）|
+|end_at|1639301729|timestamp||可变，可修改||计划结束时间。<br />自然结束（now > finish_at），提前完成(plans.total 等于 plans.id = records.plan_id 的 sum(records.done))，提前终止（用户设置 plan.status = -1）|
+|status|1|number|0, 1, 10, -1|可变(0 -> 1，1 -> 10)，可修改（1 -> -1）||0：未开始，1：进行中，10：已完成，-1：已终止|
 
-## record
-计划的完成记录。
-|字段|举例|类型|长度限制|描述|表关联|
-|----|----|----|----|----|----|
+## records
+创建计划后，即刻在 records 中生成记录 status = 0 的记录，完成当日任务时，更新该次记录。
+|字段|举例|类型|长度限制|描述|表关联|备注|
+|----|----|----|----|----|----|----|
+|id|1|number||不可变，不可修改<br />record 的唯一标识||
+|plan_id|1|number||不可变，不可修改|plans.id = records.plan_id|任务 1 的某日完成记录|
+|finish_at|1639301729|timestamp||可变，不可修改||记录的更新时间。完成的记录是可以修改的，但只能修改对应计划 plans.status === 1 的记录。当天多次完成，均在此记录中叠加|
+|total|30|number||可变，不可修改||本日应该完成的任务量。plan 创建时自动生，成初始值为 plan.per。 |
+|done|20|number||不可变，可修改||本日已经完成任务量。每日登陆时需检查：若前一天任务未完成，需要更新列表：a: status = 2，b: total = plans.remain/剩余记录条数。若前一天任务超额完成，需要更新列表：a. status = 3, b. 接下来的第 1 至 math.floor(plans.remain/plans.per) 条记录的 total = plans.per, 下一条记录的 total = plans.remain%plans.per|records.total <= plans.total，否则禁止记录，但允许 records.total >= plans.per|
+|status|1|number|0,1,10|可变，不可修||0：未开始，1：正常，2：滞后，3：超前|
