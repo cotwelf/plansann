@@ -20,6 +20,7 @@
 |per|30|number|4|可变（plans.loop === 0），可修改（plans.loop === 1）|!plans.per && plans.per <= plans.total|每天需要完成的任务量|
 |unit|`个`|string|1-10|不可变，可修改||任务的单位|
 |type|5|number|0-7|不可变，可修改||1-7：每周完成几天，0：某日完成（一次性计划）。修改后需重新计算当前 plan 的 per，并更新 records 相关信息。|
+|level|1|number|1, 2, 3, 4|不可变，不可修改||会影响页面排序（优先级由高到低）|
 |total|100|number|4|不可变，可修改（plans.loop === 0）||计划的总任务量，修改后需重新计算当前 plan 的 per，并更新 records 相关信息。|
 |remain|70|number|4|可变，不可修改|plans.per <= plans.total||剩余任务量|
 |create_at|1639301729|timestamp||不可变，不可修改||计划创建时间|
