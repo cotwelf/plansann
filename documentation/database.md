@@ -15,9 +15,8 @@
 |----|----|----|----|----|----|----|
 |id|1|number||不可变，不可修改<br />plan 的唯一标识。||一个 plan 下有一个或多个 records|plans.id = records.plan_id|
 |project_id|1|number||不可变，不可修改|plans.project_id = projects.id|关联的 project，若无，则为普通计划，不会随 projects 的变化而变化|
-|loop|0|number||不可变，可修改||0：与 total 有关的非习惯养成任务，比如 30 天内背 300 个单词，1：习惯养成任务（如每日完成 30 个单词，与 finish_at 有关|
 |name|`背单词`|string|1-10|不可变，可修改||计划的名称(允许重复)|
-|per|30|number|4|可变（plans.loop === 0），可修改（plans.loop === 1）|!plans.per && plans.per <= plans.total|每天需要完成的任务量|
+|per|30|number|4|可变，不可修改|!plans.per && plans.per <= plans.total|每天需要完成的任务量，根据输入的 total 和 总共可完成计划天数 计算而来|
 |unit|`个`|string|1-10|不可变，可修改||任务的单位|
 |type|5|number|0-7|不可变，可修改||1-7：每周完成几天，0：某日完成（一次性计划）。修改后需重新计算当前 plan 的 per，并更新 records 相关信息。|
 |level|1|number|1, 2, 3, 4|不可变，不可修改||会影响页面排序（优先级由高到低）|
@@ -28,7 +27,7 @@
 |start_at|1639301729|timestamp||不可变，可修改||计划开始时间|
 |finish_at|1639301729|timestamp||不可变，可修改||预计结束时间（填写时 finish_at >= end_at。若 now < finish_at && status === （0 || 1），status 需置为 -1，且更新 end_at）|
 |end_at|1639301729|timestamp||可变，可修改||计划结束时间。<br />自然结束（now > finish_at），提前完成(plans.total 等于 plans.id = records.plan_id 的 sum(records.done))，提前终止（用户设置 plan.status = -1）|
-|status|1|number|0, 1, 10, -1|可变(0 -> 1，1 -> 10)，可修改（1 -> -1）||0：未开始，1：进行中，10：已完成，-1：已终止|
+|status|1|number|0, 1, 10, -1，-2|可变(0 -> 1，1 -> 10)，可修改（1 -> -1）||0：未开始，1：进行中，10：已完成，-1：已终止，-2：保存的计划（每个用户只有一个已保存，下次创建计划时自动填写，已保存不与项目关联，即不记录 project_id）|
 
 ## records
 创建计划后，即刻在 records 中生成记录 status = 0 的记录，完成当日任务时，更新该次记录。
