@@ -6,8 +6,9 @@
 |----|----|----|----|----|----|----|
 |id|1|number||project 的唯一标识，不可变，不可修改||项目中可以有多个 plan，比如【英语】project 中可以有 【背单词】和【阅读】plan|
 |name|`英语`|string|1-10|不可变，可修改。||项目的名称(允许重复)|
+|theme|`{'normal':'#cccccc';'active':'#bbbbbb'}`|string|7|不可变，不可修改。||项目主题颜色|
 |create_at|1639301729|timestamp||默认记录创建时间。不可变，不可修改。||项目创建时间|
-|end_at|1639301729|timestamp||不可变，now <= end_at 时可以修改。||项目终止时间|
+|end_at|1639301729|timestamp||可变，不可以修改。||项目终止时间，只能用户手动终止|
 |status|1|number|1,10|默认值 1。可变，不可修改。||1，进行中（当前时间 <= 项目终止时间），10：已结束（当前时间 > 终止时间）
 ## plans
 所有【创建过】的计划的信息
@@ -21,7 +22,7 @@
 |type|5|number|0-7|不可变，可修改||1-7：每周完成几天，0：某日完成（一次性计划）。修改后需重新计算当前 plan 的 per，并更新 records 相关信息。|
 |level|1|number|1, 2, 3, 4|不可变，不可修改||会影响页面排序（优先级由高到低）|
 |total|100|number|4|不可变，可修改（plans.loop === 0）||计划的总任务量，修改后需重新计算当前 plan 的 per，并更新 records 相关信息。|
-|remain|70|number|4|可变，不可修改|plans.per <= plans.total||剩余任务量|
+|done|70|number|4|可变，不可修改||任务已完成的量|
 |create_at|1639301729|timestamp||不可变，不可修改||计划创建时间|
 |udpate_at|1639301729|timestamp||可变，不可修改||计划更新时间|
 |start_at|1639301729|timestamp||不可变，可修改||计划开始时间|
@@ -38,4 +39,4 @@
 |finish_at|1639301729|timestamp||可变，不可修改||记录的更新时间。完成的记录是可以修改的，但只能修改对应计划 plans.status === 1 的记录。当天多次完成，均在此记录中叠加|
 |total|30|number||可变，不可修改||本日应该完成的任务量。plan 创建时自动生，成初始值为 plan.per。 |
 |done|20|number||不可变，可修改||本日已经完成任务量。每日登陆时需检查：若前一天任务未完成，需要更新列表：a: status = 2，b: total = plans.remain/剩余记录条数。若前一天任务超额完成，需要更新列表：a. status = 3, b. 接下来的第 1 至 math.floor(plans.remain/plans.per) 条记录的 total = plans.per, 下一条记录的 total = plans.remain%plans.per|records.total <= plans.total，否则禁止记录，但允许 records.total >= plans.per|
-|status|1|number|0,1,10|可变，不可修||0：未开始，1：正常，2：滞后，3：超前|
+|status|1|number|0,1,2,3,10|可变，不可修||0：未开始，1：正常，2：滞后，3：超前, 10：已结束|
