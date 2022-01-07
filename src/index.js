@@ -1,14 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-import App from './containers/index';
+import App from './controller/index';
 import reportWebVitals from './reportWebVitals'
 import { Provider } from 'react-redux'
 import store from './store'
-import { Modal } from './components/modal'
+import { Modal, Navs } from './components'
 
 ReactDOM.render(
   <Provider store={store}>
+    <Navs />
     <App />
     <Modal />
   </Provider>,

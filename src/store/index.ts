@@ -5,7 +5,13 @@ const defaulState = {
   modal: {
     status: false,
     opts: {}
-  }
+  },
+  projects: [
+    {
+      id: 0,
+      name: '',
+    }
+  ]
 }
 const Reducer: React.FC<any> = (state = defaulState, action) => {
   switch (action.type) {

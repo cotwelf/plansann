@@ -18,6 +18,7 @@ export const Modal: React.FC<any> = () => {
       onClose()
     }
   }
+  console.log(store.getState(),'store')
   store.subscribe(() => {
     const modalOpts = window.store.getState().modal
     setShow(modalOpts.status)
