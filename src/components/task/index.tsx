@@ -24,7 +24,7 @@ export const TaskItem: React.FC<any> = ({ status, name, per, unit }) => {
     })
   }
   return (
-    <div>
+    <div className='task-item'>
       <span className={classNames("iconfont", {'icon-aixin': status})}
         onClick={doTask}
       />

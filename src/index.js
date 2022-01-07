@@ -5,11 +5,11 @@ import App from './controller/index';
 import reportWebVitals from './reportWebVitals'
 import { Provider } from 'react-redux'
 import store from './store'
-import { Modal, Navs } from './components'
+import { Modal, Nav } from './components'
 
 ReactDOM.render(
   <Provider store={store}>
-    <Navs />
+    <Nav />
     <App />
     <Modal />
   </Provider>,

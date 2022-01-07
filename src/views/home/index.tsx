@@ -10,8 +10,8 @@ export const Home: React.FC = () => {
     fetchPlans().then(res => console.log(res))
   }
   return (
-    <div>
+    <React.Fragment>
       <TaskItem status={1} check={check} name={'背单词'} per={30} unit={'个'}/>
-    </div>
+    </React.Fragment>
   )
 }

@@ -16,12 +16,14 @@ function App() {
     store.dispatch({ type: 'HIDE_MODAL'})
   }, [])
   return (
-    <Router>
-      <Switch>
-        <Route path='/' exact component={Home}/>
-        <Route path='/test' component={Test}/>
-      </Switch>
-    </Router>
+    <div className="container">
+      <Router>
+        <Switch>
+          <Route path='/' exact component={Home}/>
+          <Route path='/test' component={Test}/>
+        </Switch>
+      </Router>
+    </div>
   )
 }
 
