@@ -5,9 +5,9 @@ import {
   Route,
   Link
 } from "react-router-dom"
-import { Test } from "../views/test"
-import { Home } from "../views/home"
-import logo from '../logo.svg'
+import {Nav, Modal} from '../components'
+import { Todo } from "../views/todo"
+import { Schedule } from "../views/schedule"
 import '../App.scss'
 import store from "../store"
 
@@ -16,14 +16,21 @@ function App() {
     store.dispatch({ type: 'HIDE_MODAL'})
   }, [])
   return (
-    <div className="container">
-      <Router>
+    <Router>
+      <Nav />
+      <div className="container">
         <Switch>
-          <Route path='/' exact component={Home}/>
-          <Route path='/test' component={Test}/>
+          <Route path='/' exact component={Todo}/>
+          <Route path='/todo' component={Todo}>
+            <Route path='/:id' component={Todo}/>
+          </Route>
+          <Route path='/schedule' component={Schedule}>
+            <Route path='/:id' component={Schedule}/>
+          </Route>
         </Switch>
-      </Router>
-    </div>
+      </div>
+      <Modal />
+    </Router>
   )
 }
 

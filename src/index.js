@@ -5,13 +5,10 @@ import App from './controller/index';
 import reportWebVitals from './reportWebVitals'
 import { Provider } from 'react-redux'
 import store from './store'
-import { Modal, Nav } from './components'
 
 ReactDOM.render(
   <Provider store={store}>
-    <Nav />
     <App />
-    <Modal />
   </Provider>,
   document.getElementById('root')
 );

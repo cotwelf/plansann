@@ -1,1 +1,14 @@
 @import './home';
+@import './variables';
+
+a {
+  text-decoration: none;
+}
+
+.root {
+  height: 100vh;
+  overflow: hidden;
+}
+.container {
+  padding: 3vw;
+}

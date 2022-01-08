@@ -14,7 +14,7 @@ export const TaskItem: React.FC<any> = ({ status, name, per, unit }) => {
   }
   const doTask = () => {
     toggleModal({
-      title: 'dddd',
+      title: '恭喜完成',
       content: (
         <React.Fragment>
           本次完成

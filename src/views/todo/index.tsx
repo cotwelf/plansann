@@ -1,12 +1,11 @@
 import React, { useState } from "react"
 import { TaskItem } from '../../components'
 import { fetchPlans } from '../../api/storage'
-export const Home: React.FC = () => {
+export const Todo: React.FC = () => {
   const changeStatus = (id: number) => {
 
   }
   const check = () => {
-    console.log('sss')
     fetchPlans().then(res => console.log(res))
   }
   return (

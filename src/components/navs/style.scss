@@ -1,3 +1,44 @@
-.row {
-  
+@import '../../../public/style';
+.nav-box {
+  .nav {
+    display: flex;
+    &.row {
+      margin: 10vw 5vw 0;
+      .tab {
+        padding: 3vw 6vw;
+        height: 6vw;
+        margin-left: -2vw;
+        box-shadow: 0 -2px 6px rgba(0, 0, 0, .2);
+        &.active {
+          box-shadow: 0 -2px 10px rgba(0, 0, 0, .4);
+          height: 8vw;
+          padding-top: 5vw;
+          margin-top: -.5vw;
+        }
+      }
+    }
+    &.column {
+      flex-direction: column;
+      position: absolute;
+      right: 0;
+      top: 35vw;
+      text-align: center;
+      .tab {
+        padding: 3vw 6vw;
+        margin-left: -2vw;
+        box-shadow: 0 -2px 6px rgba(0, 0, 0, .2);
+        &.active {
+          box-shadow: 0 -2px 10px rgba(0, 0, 0, .4);
+          width: 8vw;
+          padding-top: 4vw;
+        }
+      }
+    }
+    .tab {
+      color: white;
+      border-radius: 4px;
+      transition: .1s;
+
+    }
+  }
 }

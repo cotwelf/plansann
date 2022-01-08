@@ -31,15 +31,15 @@
 |status|1|number|0, 1, 10, -1，-2|可变(0 -> 1，1 -> 10)，可修改（1 -> -1）||0：未开始，1：进行中，10：已完成，-1：已终止，-2：保存的计划（每个用户只有一个已保存，下次创建计划时自动填写，已保存不与项目关联，即不记录 project_id）|
 
 ## records
-创建计划后，即刻在 records 中生成记录 status = 0 的记录，完成当日任务时，更新该次记录。
+创建计划后，即刻在 records 中生成记录 status = 0 的记录，完成当日任务时，更新该次记录。计划可更新，更新后重新计算未来待完成记录表（即 status = 0 的记录置为 -1，并重新创建新列表 status = 0，status = 1 的记录不做处理）
 |字段|举例|类型|长度限制|描述|表关联|备注|
 |----|----|----|----|----|----|----|
 |id|1|number||不可变，不可修改<br />record 的唯一标识||
 |plan_id|1|number||不可变，不可修改|plans.id = records.plan_id|任务 1 的某日完成记录|
-|finish_at|1639301729|timestamp||可变，不可修改||记录的更新时间。完成的记录是可以修改的，但只能修改对应计划 plans.status === 1 的记录。当天多次完成，均在此记录中叠加|
+|todo_at|1639301729|timestamp||不可变，不可修改||此记录待完成时间。当天多次完成，均在此记录中叠加|
 |total|30|number||可变，不可修改||本日应该完成的任务量。plan 创建时自动生，成初始值为 plan.per。 |
 |done|20|number||不可变，可修改||本日已经完成任务量。每日登陆时需检查：若前一天任务未完成，需要更新列表：a: status = 2，b: total = plans.remain/剩余记录条数。若前一天任务超额完成，需要更新列表：a. status = 3, b. 接下来的第 1 至 math.floor(plans.remain/plans.per) 条记录的 total = plans.per, 下一条记录的 total = plans.remain%plans.per|records.total <= plans.total，否则禁止记录，但允许 records.total >= plans.per|
-|status|1|number|0,1,2,3,10|可变，不可修||0：未开始，1：正常，2：滞后，3：超前, 10：已结束|
+|status|1|number|0,1,2,3,10|可变，不可修||0：未开始，1：正常, 10：已结束， -1：终止|
 
 # theme
 > 此表属于 assets，均不可变不可修改。
