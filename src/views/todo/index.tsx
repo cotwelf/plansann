@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { TaskItem } from '../../components'
-import { fetchPlans } from '../../api/storage'
+import { fetchPlans } from '../../api/test'
 export const Todo: React.FC = () => {
   const changeStatus = (id: number) => {
 

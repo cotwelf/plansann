@@ -1,0 +1,14 @@
+.dev-tool {
+  display: flex;
+  position: absolute;
+  bottom: 10vw;
+  right: 10vw;
+  flex-direction: column;
+  div {
+    background: rgba(0, 0, 0, .2);
+    margin-bottom: 2vw;
+    padding: 3vw;
+    color: rgba(0, 0, 0, .5);
+    text-align: center;
+  }
+}

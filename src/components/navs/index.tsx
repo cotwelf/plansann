@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import classNames from 'classnames'
-import './style.scss'
-import { themeColor } from '../../constant'
 import { NavLink } from "react-router-dom"
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import './style.scss'
+import { mainColor } from '../../constant'
+import { storeContext } from '../../index'
+import { fetchPlans, fetchProjects } from '../../api/test'
 interface INav {
   navInfo: {
     id?: number
@@ -22,6 +26,16 @@ interface INav {
   }]
 }
 
+const mapStateToProps = () => {
+  return {
+    test: 1,
+  }
+}
+const mapDispatchToProps = () => {
+  return {
+    jia: () => {console.log(12)}
+  }
+}
 export const Navs: React.FC<INav> = ({navInfo, type}) => {
   useEffect(() => {
     console.log(666)
@@ -47,25 +61,29 @@ export const Navs: React.FC<INav> = ({navInfo, type}) => {
 }
 
 
-export const Nav: React.FC = () => {
+export const TNav: React.FC = (props) => {
+
+
+  console.log(props,'props')
   const topNav = [
     {
       name: "今日的计划菌",
-      theme: themeColor[0],
+      theme: mainColor,
       linkTo: '/todo'
     },
-    {
-      name: "查看进度",
-      theme: themeColor[0],
-      linkTo: '/schedule'
-    },
-    {
-      name: "我的",
-      theme: themeColor[0],
-      linkTo: '/mine'
-    },
+    // {
+    //   name: "查看进度",
+    //   theme: mainColor,
+    //   linkTo: '/schedule'
+    // },
+    // {
+    //   name: "我的",
+    //   theme: mainColor,
+    //   linkTo: '/mine'
+    // },
   ]
-  const [sideNav, setSideNav] = useState([{name: '全部', linkTo: '', theme: themeColor[0],}, {name: '全部', linkTo: '', theme: themeColor[0],}])
+  const [sideNav, setSideNav] = useState([{name: '全部', linkTo: '', theme: mainColor,}, {name: '全部', linkTo: '', theme: mainColor,}])
+  const [currentColor, setCurrentColor] = useState(mainColor)
   return (
     <div className="nav-box">
       <Navs navInfo={topNav} type="row" />
@@ -73,3 +91,5 @@ export const Nav: React.FC = () => {
     </div>
   )
 }
+
+export const Nav = connect(mapStateToProps, mapDispatchToProps)(TNav)
