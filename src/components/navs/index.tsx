@@ -26,20 +26,18 @@ interface INav {
   }]
 }
 
-const mapStateToProps = () => {
-  return {
-    test: 1,
+const mapStateToProps = (state: any) => (
+  {
+    projects: state.projects,
   }
-}
-const mapDispatchToProps = () => {
+)
+
+const mapDispatchToProps = (dispatch: any) => {
   return {
     jia: () => {console.log(12)}
   }
 }
 export const Navs: React.FC<INav> = ({navInfo, type}) => {
-  useEffect(() => {
-    console.log(666)
-  })
   return (
     <div className={classNames('nav', type)}>
 
@@ -60,28 +58,21 @@ export const Navs: React.FC<INav> = ({navInfo, type}) => {
   )
 }
 
-
 export const TNav: React.FC = (props) => {
-
-
-  console.log(props,'props')
   const topNav = [
     {
       name: "今日的计划菌",
       theme: mainColor,
       linkTo: '/todo'
     },
-    // {
-    //   name: "查看进度",
-    //   theme: mainColor,
-    //   linkTo: '/schedule'
-    // },
-    // {
-    //   name: "我的",
-    //   theme: mainColor,
-    //   linkTo: '/mine'
-    // },
   ]
+  useEffect(() => {
+    console.log('fetchProjects')
+    fetchProjects().then(res => {
+      console.log(res,'projects')
+    })
+  }, [])
+  console.log(props, 'props')
   const [sideNav, setSideNav] = useState([{name: '全部', linkTo: '', theme: mainColor,}, {name: '全部', linkTo: '', theme: mainColor,}])
   const [currentColor, setCurrentColor] = useState(mainColor)
   return (

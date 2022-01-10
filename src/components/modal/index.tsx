@@ -1,12 +1,19 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import classNames from 'classnames'
 import './style.scss'
 import store from "../../store"
+import { connect } from "react-redux"
 
+const mapStateToProps = (state: any) => {
+
+}
+const mapDispatchToProps = () => ({
+  // closeModal:
+})
 interface IModal {
   classnames?: string
 }
-export const Modal: React.FC<any> = () => {
+const IModal: React.FC<any> = () => {
   const [show, setShow] = useState(false)
   const [title, setTitle] = useState('')
   const [content, setContent] = useState(null)
@@ -18,7 +25,6 @@ export const Modal: React.FC<any> = () => {
       onClose()
     }
   }
-  console.log(store.getState(),'store')
   store.subscribe(() => {
     const modalOpts = window.store.getState().modal
     setShow(modalOpts.status)
@@ -39,3 +45,5 @@ export const Modal: React.FC<any> = () => {
     </div>
   )
 }
+
+export const Modal = connect(mapStateToProps, mapDispatchToProps)(IModal)
