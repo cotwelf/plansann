@@ -6,7 +6,6 @@ import { createStructuredSelector } from 'reselect'
 import './style.scss'
 import { mainColor } from '../../constant'
 import { storeContext } from '../../index'
-import { fetchPlans, fetchProjects } from '../../api/test'
 interface INav {
   navInfo: {
     id?: number
@@ -66,12 +65,6 @@ export const TNav: React.FC = (props) => {
       linkTo: '/todo'
     },
   ]
-  useEffect(() => {
-    console.log('fetchProjects')
-    fetchProjects().then(res => {
-      console.log(res,'projects')
-    })
-  }, [])
   console.log(props, 'props')
   const [sideNav, setSideNav] = useState([{name: '全部', linkTo: '', theme: mainColor,}, {name: '全部', linkTo: '', theme: mainColor,}])
   const [currentColor, setCurrentColor] = useState(mainColor)

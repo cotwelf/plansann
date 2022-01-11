@@ -4,19 +4,14 @@ import './style.scss'
 import store from "../../store"
 import { connect } from "react-redux"
 
-const mapStateToProps = (state: any) => {
-
-}
+const mapStateToProps = (state: any) => ({
+  modal: state.modal
+})
 const mapDispatchToProps = () => ({
   // closeModal:
 })
-interface IModal {
-  classnames?: string
-}
-const IModal: React.FC<any> = () => {
-  const [show, setShow] = useState(false)
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState(null)
+const TModal: React.FC<any> = ({ modal }) => {
+
   const onClose = () => {
     store.dispatch({ type: 'HIDE_MODAL'})
   }
@@ -25,25 +20,19 @@ const IModal: React.FC<any> = () => {
       onClose()
     }
   }
-  store.subscribe(() => {
-    const modalOpts = window.store.getState().modal
-    setShow(modalOpts.status)
-    setTitle(modalOpts.opts?.title || '')
-    setContent(modalOpts.opts?.content || '')
-  })
   return (
-    <div className={classNames('modal', {show})} onClick={(e) => closeModal(e)}>
+    <div className={classNames('modal', {show: modal.status})} onClick={(e) => closeModal(e)}>
       <div className='content'>
         <div className='header'>
-          <div className='title'>{title}</div>
+          {!!modal.opts?.title && <div className='title'>{modal.opts.title}</div> }
           <div className='close' onClick={onClose} />
         </div>
-        <div className='body'>
-          {content}
-        </div>
+        {!!modal.opts?.content && <div className='body'>
+          {modal.opts.content}
+        </div>}
       </div>
     </div>
   )
 }
 
-export const Modal = connect(mapStateToProps, mapDispatchToProps)(IModal)
+export const Modal = connect(mapStateToProps, mapDispatchToProps)(TModal)

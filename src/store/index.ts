@@ -1,30 +1,16 @@
-import React from 'react'
 import { createStore } from 'redux'
+import { IRootState, rootReducer } from '../modules/root-reducer'
 
-const defaulState = {
-  modal: {
-    status: false,
-    opts: {}
-  },
-  projects: [
-    {
-      id: 0,
-      name: '',
-    }
-  ]
-}
-const Reducer: React.FC<any> = (state = defaulState, action) => {
-  switch (action.type) {
-    case 'SHOW_MODAL':
-      return {...defaulState, modal: {status :true, opts: action.payload}}
-    case 'HIDE_MODAL':
-      return {...defaulState, modal: {status :false}}
-    default:
-      return state
-  }
-}
 
-let store = createStore(Reducer)
-window.store = store
+// const Reducer: React.FC<any> = (state = defaulState, action) => {
+//   switch (action.type) {
+//     case 'SHOW_MODAL':
+//       return {...defaulState, modal: {status :true, opts: action.payload}}
+//     case 'HIDE_MODAL':
+//       return {...defaulState, modal: {status :false}}
+//     default:
+//       return state
+//   }
+// }
 
-export default store
+export default createStore(rootReducer)

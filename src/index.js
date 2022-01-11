@@ -1,11 +1,14 @@
 import React, { createContext } from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-import App from './controller/index';
+import App from './containers/index';
 import { DevTool } from './assets/testdata';
 import reportWebVitals from './reportWebVitals'
 import { Provider } from 'react-redux'
+import { modulesInit } from './modules'
 import store from './store'
+
+modulesInit(store)
 
 export const storeContext = createContext()
 const Root = () => (

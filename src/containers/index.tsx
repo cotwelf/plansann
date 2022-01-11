@@ -6,8 +6,8 @@ import {
   Link
 } from "react-router-dom"
 import {Nav, Modal} from '../components'
-import { Todo } from "../views/todo"
-import { Schedule } from "../views/schedule"
+import { Todo } from "./todo"
+import { Schedule } from "./schedule"
 import '../App.scss'
 import store from "../store"
 

@@ -17,7 +17,7 @@ interface IProjects {
   theme: number,
 }
 
-export const fetchProjects = () => {
+export const fetchProjectsData = () => {
   return new Promise((resolve) => {
     const projects = localStorage.getItem('projects')
     let newProjects: any = []
@@ -27,11 +27,11 @@ export const fetchProjects = () => {
         getThemeList().then((res: any) => {
           newProjects.map((item: any) => {
             const themeNumber = item.theme.toString().split('.')
-            const color = res.filter((r: any) => r.id === themeNumber[0]*1)[0]
+            const color = res.filter((r: any) => r.id === themeNumber[0]*1)
             item.theme = {
-              normal: color.normal,
-              active: color.active,
-              type: color.type,
+              normal: color ? color.normal: '',
+              active: color ? color.active : '',
+              type: color ? color.type : '',
             }
           })
         })
