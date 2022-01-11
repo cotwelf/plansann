@@ -1,9 +1,18 @@
-.text{
-  font-size: 24px;
-}
+.task-item {
+  display: flex;
+  align-items: center;
+  .icon {
+    width: 10vw;
+    height: 10vw;
+    background-color: pink;
+  }
+  .text{
+    font-size: 24px;
+  }
 
-.title {
-  &::before {
-    background-image: url('../../assets/images/title.png')
+  .title {
+    &::before {
+      background-image: url('../../assets/images/title.png')
+    }
   }
 }

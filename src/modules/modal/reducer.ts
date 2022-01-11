@@ -1,5 +1,6 @@
 import { Reducer } from 'redux'
-import { IRootAction } from './root-action'
+import { IRootAction } from '../root-action'
+
 
 export type IState = {
   status: boolean
@@ -18,9 +19,9 @@ export const reducer: Reducer<IState> = (
 ): IState => {
   switch (action.type) {
     case 'SHOW_MODAL':
-      return { status :true, opts: action.payload }
+      return { ...state, status :true, opts: action.payload }
     case 'HIDE_MODAL':
-      return { status :false }
+      return { ...state, status :false }
     default:
       return state
   }

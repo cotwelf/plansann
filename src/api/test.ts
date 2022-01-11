@@ -27,7 +27,7 @@ export const fetchProjectsData = () => {
         getThemeList().then((res: any) => {
           newProjects.map((item: any) => {
             const themeNumber = item.theme.toString().split('.')
-            const color = res.filter((r: any) => r.id === themeNumber[0]*1)
+            const color = res.filter((r: any) => r.id === themeNumber[0]*1)[0]
             item.theme = {
               normal: color ? color.normal: '',
               active: color ? color.active : '',

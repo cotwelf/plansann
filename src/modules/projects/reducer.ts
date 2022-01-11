@@ -1,7 +1,6 @@
 import { Reducer } from 'redux'
 import { IRootAction } from '../root-action'
-import { getProjects } from '../../api'
-import { GET_PROJECTS } from './actions'
+import { UPDATE_PROJECTS } from './actions'
 
 export type IState = {
   readonly id: number
@@ -24,10 +23,9 @@ export const initialState: IState = [{
 export const reducer: Reducer<IState> = (
   state: IState = initialState, action: IRootAction
 ): IState => {
-  console.log(action, 'action')
   switch (action.type) {
-    case GET_PROJECTS: {
-      return state
+    case UPDATE_PROJECTS: {
+      return action.payload
     }
     default:
       return state

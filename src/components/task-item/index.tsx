@@ -2,8 +2,16 @@ import React, { useState } from 'react'
 import classNames from 'classnames'
 import { toggleModal } from '../../utils/base'
 import './style.scss'
+import { connect } from 'react-redux'
+import { IState } from '../../modules/projects'
 
-export const TaskItem: React.FC<any> = ({ status, name, per, unit }) => {
+const mapStateToProps = (state: IState) => ({
+
+})
+const mapDispatchToProps = () => ({
+
+})
+export const TTaskItem: React.FC<any> = ({ status, name, per, unit }) => {
   const [done, setDone] = useState()
   const onDoneChange = (e: any) => {
     if (typeof e.target.value === 'number' && e.target.value < 999) {
@@ -25,10 +33,12 @@ export const TaskItem: React.FC<any> = ({ status, name, per, unit }) => {
   }
   return (
     <div className='task-item'>
-      <span className={classNames("iconfont", {'icon-aixin': status})}
+      <span className={classNames("icon iconfont", {'icon-aixin': status})}
         onClick={doTask}
       />
-      <span className="text">{name} {per} {unit}</span>
+      <span className="text">{`${name} ${per} ${unit}`}</span>
     </div>
   )
 }
+
+export const TaskItem = connect(mapStateToProps, mapDispatchToProps)(TTaskItem)

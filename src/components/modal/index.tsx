@@ -1,4 +1,3 @@
-import { useState } from "react"
 import classNames from 'classnames'
 import './style.scss'
 import store from "../../store"
@@ -11,7 +10,6 @@ const mapDispatchToProps = () => ({
   // closeModal:
 })
 const TModal: React.FC<any> = ({ modal }) => {
-
   const onClose = () => {
     store.dispatch({ type: 'HIDE_MODAL'})
   }
