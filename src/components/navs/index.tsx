@@ -1,23 +1,32 @@
 import React, { useContext, useEffect, useState } from "react"
 import classNames from 'classnames'
-import { NavLink } from "react-router-dom"
+import { NavLink, useRouteMatch } from "react-router-dom"
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import './style.scss'
 import { mainColor } from '../../constant'
 import { storeContext } from '../../index'
+import { IState as IProjects} from '../../modules/projects'
+export interface INavProps {
+  projects: any
+}
+export interface INavState {
+  sideNav: any
+}
+interface InavInfo {
+  id?: number
+  onClickFunc?: React.MouseEventHandler
+  name: string
+  classNames?: string
+  theme: {
+    normal: string
+    active: string
+  }
+  linkTo: string
+  exact?: boolean
+}
 interface INav {
-  navInfo: {
-    id?: number
-    onClickFunc?: React.MouseEventHandler
-    name: string
-    classNames?: string
-    theme: {
-      normal: string
-      active: string
-    }
-    linkTo: string
-  }[]
+  navInfo: InavInfo[]
   type: 'row' | 'column'
   otherNav?: [{
     name: string
@@ -25,11 +34,9 @@ interface INav {
   }]
 }
 
-const mapStateToProps = (state: any) => (
-  {
-    projects: state.projects,
-  }
-)
+const mapStateToProps = (state: any) => ({
+  projects: state.projects,
+})
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
@@ -44,6 +51,7 @@ export const Navs: React.FC<INav> = ({navInfo, type}) => {
         <NavLink
         key={nav.id || index}
         onClick={nav.onClickFunc}
+        exact={nav.exact}
         style={isActive => (
           {
             backgroundColor: isActive ? nav.theme.active || '#fff' : nav.theme.normal,
@@ -57,16 +65,31 @@ export const Navs: React.FC<INav> = ({navInfo, type}) => {
   )
 }
 
-export const TNav: React.FC = (props) => {
+export const TNav: React.FC<INavProps> = ({ projects }) => {
+  const match = useRouteMatch()
+  console.log(match, 'params')
+  const projectNav = projects.map((item: any) => ({
+    name: item.name,
+    theme: item.theme,
+    linkTo: `/todo/${item.id}`
+  }))
+  console.log(projectNav,'nav')
+
   const topNav = [
     {
       name: "今日的计划菌",
       theme: mainColor,
-      linkTo: '/todo'
+      linkTo: '/todo',
+      exact: true,
     },
+
   ]
-  console.log(props, 'props')
-  const [sideNav, setSideNav] = useState([{name: '全部', linkTo: '', theme: mainColor,}, {name: '全部', linkTo: '', theme: mainColor,}])
+
+  const sideNav = [
+    { name: '全部', linkTo: '', theme: mainColor },
+    ...projectNav,
+  ]
+  console.log(projects, 'propssss')
   const [currentColor, setCurrentColor] = useState(mainColor)
   return (
     <div className="nav-box">
