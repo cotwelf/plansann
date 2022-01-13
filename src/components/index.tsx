@@ -1,5 +1,6 @@
 import { Modal } from "./modal"
 import { TaskItem } from "./task-item"
-import { Navs, Nav } from "./navs"
+import { Navs } from "./navs"
+// import { Navs, Nav } from "./navs"
 
-export { Modal, TaskItem, Navs, Nav }
+export { Modal, TaskItem, Navs }

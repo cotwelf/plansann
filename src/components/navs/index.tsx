@@ -1,18 +1,7 @@
-import React, { useContext, useEffect, useState } from "react"
+import React from "react"
 import classNames from 'classnames'
-import { NavLink, useRouteMatch } from "react-router-dom"
-import { connect } from 'react-redux'
-import { createStructuredSelector } from 'reselect'
+import { NavLink } from "react-router-dom"
 import './style.scss'
-import { mainColor } from '../../constant'
-import { storeContext } from '../../index'
-import { IState as IProjects} from '../../modules/projects'
-export interface INavProps {
-  projects: any
-}
-export interface INavState {
-  sideNav: any
-}
 interface InavInfo {
   id?: number
   onClickFunc?: React.MouseEventHandler
@@ -34,19 +23,10 @@ interface INav {
   }]
 }
 
-const mapStateToProps = (state: any) => ({
-  projects: state.projects,
-})
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    jia: () => {console.log(12)}
-  }
-}
-export const Navs: React.FC<INav> = ({navInfo, type}) => {
+export const Navs: React.FC<INav> = ({ navInfo, type }) => {
   return (
     <div className={classNames('nav', type)}>
-
       {navInfo && navInfo.map((nav, index) => (
         <NavLink
         key={nav.id || index}
@@ -64,39 +44,3 @@ export const Navs: React.FC<INav> = ({navInfo, type}) => {
     </div>
   )
 }
-
-export const TNav: React.FC<INavProps> = ({ projects }) => {
-  const match = useRouteMatch()
-  console.log(match, 'params')
-  const projectNav = projects.map((item: any) => ({
-    name: item.name,
-    theme: item.theme,
-    linkTo: `/todo/${item.id}`
-  }))
-  console.log(projectNav,'nav')
-
-  const topNav = [
-    {
-      name: "今日的计划菌",
-      theme: mainColor,
-      linkTo: '/todo',
-      exact: true,
-    },
-
-  ]
-
-  const sideNav = [
-    { name: '全部', linkTo: '', theme: mainColor },
-    ...projectNav,
-  ]
-  console.log(projects, 'propssss')
-  const [currentColor, setCurrentColor] = useState(mainColor)
-  return (
-    <div className="nav-box">
-      <Navs navInfo={topNav} type="row" />
-      <Navs navInfo={sideNav} type="column" />
-    </div>
-  )
-}
-
-export const Nav = connect(mapStateToProps, mapDispatchToProps)(TNav)

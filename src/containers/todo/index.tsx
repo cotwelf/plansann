@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import { TaskItem } from '../../components'
 import { fetchPlans } from '../../api/test'
-export const Todo: React.FC = () => {
+export const Todo: React.FC = (props) => {
+  console.log(props,'props')
   const changeStatus = (id: number) => {
 
   }
