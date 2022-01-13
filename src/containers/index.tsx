@@ -3,11 +3,12 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Redirect,
 } from "react-router-dom"
 import { Navs, Modal } from '../components'
 import { Todo } from "./todo"
 import { Schedule } from "./schedule"
+import { Mine } from "./mine"
 import '../App.scss'
 import store from "../store"
 import { connect } from "react-redux"
@@ -19,7 +20,7 @@ interface IMainNav extends INav {
 }
 const mapStateToProps = (state: IRootState) => {
   const navInfo = state.nav.navs
-  navInfo.forEach((item: any) => {item.theme = state.nav.navColor})
+  navInfo.forEach((item: any) => {item.theme = state.nav.themeColor})
   return {
     navInfo,
   }
@@ -37,13 +38,14 @@ const TApp: React.FC<IAppProps>  = ({ navInfo }) => {
       <Navs navInfo={navInfo} type="row" />
       <div className="container">
         <Switch>
-          <Route path='/' exact component={Todo}/>
           <Route path='/todo' component={Todo}>
-            <Route path='/todo/:id' component={Todo}/>
+            <Route path='/:id' component={Todo}/>
           </Route>
           <Route path='/schedule' component={Schedule}>
             <Route path='/:id' component={Schedule}/>
           </Route>
+          <Route path='/mine' component={Mine} />
+          <Redirect to='/todo' />
         </Switch>
       </div>
       <Modal />

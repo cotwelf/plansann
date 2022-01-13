@@ -13,7 +13,7 @@ export interface IThemeColor {
 }
 export type IState = {
   readonly navs: INav[]
-  readonly navColor: IThemeColor
+  readonly themeColor: IThemeColor
 }
 const initialState: IState = {
   navs: [
@@ -30,7 +30,7 @@ const initialState: IState = {
       linkTo: '/mine',
     }
   ],
-  navColor: {
+  themeColor: {
     normal: '#fdbaa8',
     active: '#ff7c7c',
   }

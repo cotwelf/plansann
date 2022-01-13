@@ -8,15 +8,6 @@ export const fetchPlans = () => {
   })
 }
 
-interface IProjects {
-  create_at: number,
-  end_at: number,
-  id: number,
-  name: string,
-  status: number,
-  theme: number,
-}
-
 export const fetchProjectsData = () => {
   return new Promise((resolve) => {
     const projects = localStorage.getItem('projects')

@@ -2,35 +2,36 @@ import React from "react"
 import classNames from 'classnames'
 import { NavLink } from "react-router-dom"
 import './style.scss'
-interface InavInfo {
+export interface InavInfo {
   id?: number
-  onClickFunc?: React.MouseEventHandler
   name: string
   classNames?: string
   theme: {
     normal: string
     active: string
+    type?: number
   }
   linkTo: string
   exact?: boolean
 }
-interface INav {
+export interface INav {
   navInfo: InavInfo[]
+  onClickFunc?: Function
   type: 'row' | 'column'
   otherNav?: [{
     name: string
-    onClickFunc?: React.MouseEventHandler
   }]
 }
 
 
-export const Navs: React.FC<INav> = ({ navInfo, type }) => {
+export const Navs: React.FC<INav> = ({ navInfo, type, onClickFunc }) => {
+  const onClickFunction = onClickFunc ? onClickFunc : () => {}
   return (
     <div className={classNames('nav', type)}>
       {navInfo && navInfo.map((nav, index) => (
         <NavLink
         key={nav.id || index}
-        onClick={nav.onClickFunc}
+        onClick={onClickFunction.bind(this, nav.id)}
         exact={nav.exact}
         style={isActive => (
           {
