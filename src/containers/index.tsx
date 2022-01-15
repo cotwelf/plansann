@@ -56,8 +56,7 @@ const TApp: React.FC = ({ navInfoSide, navInfo, changeNavColor, defaultTheme, hi
     changeNavColor(newTheme)
   }
   useEffect(() => {
-    hideModal()
-  }, [])
+  })
   return (
     <Router>
       <Navs navInfo={navInfo} type="row" />

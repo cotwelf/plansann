@@ -11,14 +11,7 @@ export type IState = {
   readonly status: number
 }[]
 
-export const initialState: IState = [{
-  id: 0,
-  name: '',
-  theme: 1.1,
-  create_at: 0,
-  end_at: 0,
-  status: 0,
-}]
+export const initialState: IState = []
 
 export const reducer: Reducer<IState> = (
   state: IState = initialState, action: IRootAction
