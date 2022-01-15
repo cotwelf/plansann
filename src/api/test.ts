@@ -1,10 +1,27 @@
+import moment from 'moment'
+
+export const createProjectApi = ({ name, theme }: any) => {
+  return new Promise((resolve) => {
+    const projects = JSON.parse(localStorage.getItem('projects') || '[]')
+    const newProjects = [
+      ...projects,
+      {
+        id: projects.length + 1,
+        name,
+        theme,
+        create_at: moment().second(),
+        status: 1
+      },
+    ]
+    localStorage.setItem('projects', JSON.stringify(newProjects))
+    resolve({ code: 1, success: true})
+  })
+}
+
+
 export const fetchPlans = () => {
   return new Promise((resolve) => {
-    let plans = localStorage.getItem('plans')
-    if (plans) {
-      plans = JSON.parse(plans)
-    }
-    resolve(plans)
+    resolve(JSON.parse(localStorage.getItem('plans') || '[]'))
   })
 }
 
@@ -39,5 +56,15 @@ export const getThemeList = () => {
       theme = JSON.parse(theme)
     }
     resolve(theme)
+  })
+}
+
+export const getTodos = () => {
+  return new Promise((resolve) => {
+    let todos = localStorage.getItem('todos')
+    if (todos) {
+      todos = JSON.parse(todos)
+    }
+    resolve(todos)
   })
 }

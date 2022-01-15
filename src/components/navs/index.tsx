@@ -21,17 +21,18 @@ export interface INav {
   otherNav?: [{
     name: string
   }]
+  state?: any
 }
 
 
-export const Navs: React.FC<INav> = ({ navInfo, type, onClickFunc }) => {
+export const Navs: React.FC<INav> = ({ navInfo, type, onClickFunc, state }) => {
   const onClickFunction = onClickFunc ? onClickFunc : () => {}
   return (
     <div className={classNames('nav', type)}>
       {navInfo && navInfo.map((nav, index) => (
         <NavLink
         key={nav.id || index}
-        onClick={onClickFunction.bind(this, nav.id)}
+        onClick={onClickFunction.bind(this, nav)}
         exact={nav.exact}
         style={isActive => (
           {
@@ -39,6 +40,7 @@ export const Navs: React.FC<INav> = ({ navInfo, type, onClickFunc }) => {
             zIndex: isActive ? 10 : Math.abs(index - navInfo.length)
           })}
         className={classNames('tab', nav.classNames)}
+        // to={{pathname: nav.linkTo, state}}
         to={nav.linkTo}
         >{nav.name}</NavLink>
       ))}

@@ -12,12 +12,12 @@ export interface IThemeColor {
   active: string
 }
 export type IState = {
-  readonly navs: INav[]
+  readonly topNav: INav[]
   readonly themeColor: IThemeColor
   readonly defaultTheme: IThemeColor
 }
 const initialState: IState = {
-  navs: [
+  topNav: [
     {
       name: "今日的计划菌",
       linkTo: '/todo',
