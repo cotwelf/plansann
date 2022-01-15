@@ -14,6 +14,7 @@ export interface IThemeColor {
 export type IState = {
   readonly navs: INav[]
   readonly themeColor: IThemeColor
+  readonly defaultTheme: IThemeColor
 }
 const initialState: IState = {
   navs: [
@@ -33,6 +34,10 @@ const initialState: IState = {
   themeColor: {
     normal: '#fdbaa8',
     active: '#ff7c7c',
+  },
+  defaultTheme: {
+    normal: '#fdbaa8',
+    active: '#ff7c7c',
   }
 }
 
@@ -41,7 +46,13 @@ export const reducer: Reducer<IState> = (
 ): IState => {
   switch (action.type) {
     case UPDATE_THEME:
-      return action.payload
+      return {
+        ...state,
+        themeColor: {
+          normal: action.payload.normal,
+          active: action.payload.active,
+        }
+      }
     default:
       return state
   }

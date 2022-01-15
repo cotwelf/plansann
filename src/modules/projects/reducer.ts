@@ -3,7 +3,7 @@ import { IRootAction } from '../root-action'
 import { UPDATE_PROJECTS } from './actions'
 
 export type IState = {
-  readonly id: number
+  readonly id?: number
   readonly name: string
   readonly theme: number
   readonly create_at: number

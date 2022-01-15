@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { Navs, TaskItem } from '../../components'
-import { fetchPlans } from '../../api/test'
 import { connect } from "react-redux"
 import { IRootState } from "../../modules"
 
 const mapStateToProps = (state: IRootState) => {
-  console.log(state)
   const navInfo = state.projects.map(({ id, name, theme }) => ({
     id,
     name,
@@ -21,13 +19,26 @@ const mapStateToProps = (state: IRootState) => {
         exact: true,
       },
       ...navInfo
-    ]
+    ],
+    defaultTheme: state.nav.defaultTheme
   }
 }
-export const TTodo: React.FC = ({ navInfo }: any) => {
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {changeNavColor: (theme: any) => dispatch({
+    type: 'UPDATE_THEME',
+    payload: theme
+  })}
+}
+
+export const TTodo: React.FC = ({ navInfo, defaultTheme, changeNavColor, location }: any) => {
   const changeStatus = (id: any) => {
-    console.log(id)
+    const newTheme = id ? navInfo.find((item: any) => item.id === id).theme : defaultTheme
+    changeNavColor(newTheme)
   }
+  useEffect(() => {
+    // changeStatus(location.pathname.split('/')[2] * 1)
+  },[])
   return (
     <React.Fragment>
       <Navs onClickFunc={changeStatus} navInfo={navInfo} type="column" />
@@ -36,4 +47,4 @@ export const TTodo: React.FC = ({ navInfo }: any) => {
   )
 }
 
-export const Todo = connect(mapStateToProps)(TTodo)
+export const Todo = connect(mapStateToProps, mapDispatchToProps)(TTodo)

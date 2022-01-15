@@ -22,13 +22,18 @@
     right: 0;
     top: 35vw;
     text-align: center;
+    letter-spacing: 3px;
     .tab {
       padding: 3vw 6vw;
-      margin-left: -2vw;
-      box-shadow: 0 -2px 6px rgba(0, 0, 0, .2);
+      margin:0 2vw 0 -2vw;
+      box-shadow: 2px 0 6px rgba(0, 0, 0, .2);
+      writing-mode: vertical-rl;
+      width: 6vw;
       &.active {
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, .4);
-        width: 8vw;
+        position: relative;
+        left: -2vw;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, .4);
+        width: 8.5vw;
         padding-top: 4vw;
       }
     }
