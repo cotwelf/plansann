@@ -44,14 +44,12 @@ const initialState: IState = {
 export const reducer: Reducer<IState> = (
   state: IState = initialState, action: IRootAction
 ): IState => {
+  console.log(action.payload,'pay')
   switch (action.type) {
     case UPDATE_THEME:
       return {
         ...state,
-        themeColor: {
-          normal: action.payload.normal,
-          active: action.payload.active,
-        }
+        themeColor: action.payload
       }
     default:
       return state

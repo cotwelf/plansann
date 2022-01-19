@@ -38,7 +38,6 @@ export const TTodo: React.FC = ({ navInfo, defaultTheme, themeColor, changeNavCo
     changeNavColor(newTheme)
   }
   useEffect(() => {
-    console.log(navInfo,'infoooooo')
   },[])
   return (
     <React.Fragment>

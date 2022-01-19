@@ -12,6 +12,8 @@ import { Mine } from "./mine"
 import '../App.scss'
 import { connect } from "react-redux"
 import { IRootState } from "../modules/"
+import { changeNavColor } from "../modules/nav"
+import { bindActionCreators } from "redux"
 
 const mapStateToProps = (state: IRootState) => {
   const navInfo = state.nav.topNav
@@ -38,22 +40,18 @@ const mapStateToProps = (state: IRootState) => {
     themeColor: state.nav.themeColor
   }
 }
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    changeNavColor: (theme: any) => dispatch({
-      type: 'UPDATE_THEME',
-      payload: theme
-    }),
-    hideModal: () => dispatch({ type: 'HIDE_MODAL' })
-  }
-}
+const mapDispatchToProps = (dispatch: any) => bindActionCreators({
+  onChangeNavColor: changeNavColor,
+}, dispatch)
 
-const TApp: React.FC = ({ navInfoSide, navInfo, changeNavColor, defaultTheme, hideModal }: any) => {
+const TApp: React.FC = (props: any) => {
+  const { navInfoSide, navInfo, onChangeNavColor, defaultTheme, match, history } = props
+  console.log(props, 'history')
   const changeStatus = ({id}: any) => {
     const newTheme = id && navInfoSide.find((item: any) => item.id === id)
                       ? navInfoSide.find((item: any) => item.id === id).theme
                       : defaultTheme
-    changeNavColor(newTheme)
+    onChangeNavColor(newTheme)
   }
   useEffect(() => {
   })
