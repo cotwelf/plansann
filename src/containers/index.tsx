@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import {
   BrowserRouter as Router,
   Switch,
@@ -17,48 +17,56 @@ import { bindActionCreators } from "redux"
 
 const mapStateToProps = (state: IRootState) => {
   const navInfo = state.nav.topNav
-  console.log(window.location.pathname.split('/')[1],'pathname')
-  const navInfoSide = state.projects.map(({ id, name, theme = state.nav.defaultTheme }) => ({
-    id,
-    name,
-    theme,
-    linkTo: `/${window.location.pathname.split('/')[1]}/${id}`
-  }))
   navInfo.forEach((item: any) => {item.theme = state.nav.themeColor})
   return {
     navInfo,
-    navInfoSide: [
-      {
-        name: '全部',
-        theme: state.nav.defaultTheme,
-        linkTo: `/${window.location.pathname.split('/')[1]}/`,
-        exact: true,
-      },
-      ...navInfoSide
-    ],
+    projects: state.projects,
     defaultTheme: state.nav.defaultTheme,
     themeColor: state.nav.themeColor
   }
 }
 const mapDispatchToProps = (dispatch: any) => bindActionCreators({
-  onChangeNavColor: changeNavColor,
+  changeNavColor: changeNavColor,
 }, dispatch)
 
 const TApp: React.FC = (props: any) => {
-  const { navInfoSide, navInfo, onChangeNavColor, defaultTheme, match, history } = props
-  console.log(props, 'history')
-  const changeStatus = ({id}: any) => {
+  const { navInfo, changeNavColor, defaultTheme, projects } = props
+  const [ page, setPage ] = useState(window.location.pathname.split('/')[1])
+  const defaultSideNav = [{
+    name: '全部',
+    theme: defaultTheme,
+    linkTo: `/${page}/`,
+    exact: true,
+  }]
+  const [ navInfoSide, setNavInfoSide ] = useState(defaultSideNav)
+  const onChangeNavColor = ({id = 0}: any) => {
     const newTheme = id && navInfoSide.find((item: any) => item.id === id)
-                      ? navInfoSide.find((item: any) => item.id === id).theme
+                      ? navInfoSide.find((item: any) => item?.id === id)?.theme
                       : defaultTheme
-    onChangeNavColor(newTheme)
+    changeNavColor(newTheme)
+  }
+  const onChangeSideNav = ({linkTo}: any) => {
+    if (linkTo) {
+      setPage(linkTo.substr(1))
+    }
+    const info: any = [
+      ...defaultSideNav,
+      ...projects.map(({ id, name, theme = defaultTheme }: any) => ({
+        id,
+        name,
+        theme,
+        linkTo: `/${page}/${id}`
+      }))
+    ]
+    setNavInfoSide(info)
   }
   useEffect(() => {
-  })
+    onChangeSideNav("")
+  },[projects])
   return (
     <Router>
-      <Navs navInfo={navInfo} type="row" />
-      <Navs onClickFunc={changeStatus}  navInfo={navInfoSide} type="column" />
+      <Navs onClickFunc={onChangeSideNav} navInfo={navInfo} type="row" />
+      <Navs onClickFunc={onChangeNavColor}  navInfo={navInfoSide} type="column" />
       <div className="container">
         <Switch>
           <Route path='/todo' component={Todo}>
