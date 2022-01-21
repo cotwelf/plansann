@@ -62,6 +62,7 @@ const TApp: React.FC = (props: any) => {
   }
   useEffect(() => {
     onChangeSideNav("")
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[projects])
   return (
     <Router>
@@ -69,10 +70,10 @@ const TApp: React.FC = (props: any) => {
       <Navs onClickFunc={onChangeNavColor}  navInfo={navInfoSide} type="column" />
       <div className="container">
         <Switch>
-          <Route path='/todo' component={Todo}>
+          <Route path='/todo'>
             <Route path='/:id' component={Todo}/>
           </Route>
-          <Route path='/schedule' component={Schedule}>
+          <Route path='/schedule'>
             <Route path='/:id' component={Schedule}/>
           </Route>
           <Route path='/mine' component={Mine} />

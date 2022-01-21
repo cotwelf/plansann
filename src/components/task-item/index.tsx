@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import classNames from 'classnames'
 import { toggleModal } from '../../utils/base'
 import './style.scss'
-import { connect } from 'react-redux'
-import { IState } from '../../modules/projects'
 
 export const TaskItem: React.FC<any> = ({ status, name, per, unit }) => {
   const [done, setDone] = useState()

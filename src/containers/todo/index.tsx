@@ -1,5 +1,5 @@
-import React, { useEffect } from "react"
-import { Navs, TaskItem } from '../../components'
+import React from "react"
+import { TaskItem } from '../../components'
 import { connect } from "react-redux"
 import { IRootState } from "../../modules"
 
@@ -33,15 +33,8 @@ const mapDispatchToProps = (dispatch: any) => {
 }
 
 export const TTodo: React.FC = ({ navInfo, defaultTheme, themeColor, changeNavColor, location }: any) => {
-  const changeStatus = (id: any) => {
-    const newTheme = id ? navInfo.find((item: any) => item.id === id).theme : defaultTheme
-    changeNavColor(newTheme)
-  }
-  useEffect(() => {
-  },[])
   return (
     <React.Fragment>
-      {/* <Navs onClickFunc={changeStatus}  navInfo={navInfo} type="column" /> */}
       <TaskItem status={1} name={'背单词'} per={30} unit={'个'}/>
     </React.Fragment>
   )

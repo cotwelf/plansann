@@ -33,7 +33,7 @@ export const fetchProjectsData = () => {
       newProjects = JSON.parse(projects)
       if (newProjects.length > 0) {
         getThemeList().then((res: any) => {
-          newProjects.map((item: any) => {
+          newProjects.forEach((item: any) => {
             const themeNumber = item.theme.toString().split('.')
             const color = res.filter((r: any) => r.id === themeNumber[0]*1)[0]
             item.theme = {
