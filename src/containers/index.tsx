@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,7 +9,7 @@ import { Navs, Modal } from '../components'
 import { Todo } from "./todo"
 import { Schedule } from "./schedule"
 import { Mine } from "./mine"
-import '../App.scss'
+import './main.scss'
 import { connect } from "react-redux"
 import { IRootState } from "../modules/"
 import { changeNavColor } from "../modules/nav"
@@ -39,6 +39,8 @@ const TApp: React.FC = (props: any) => {
     exact: true,
   }]
   const [ navInfoSide, setNavInfoSide ] = useState(defaultSideNav)
+  const [ adding, setAdding ] = useState(false)
+  const inputRef = useRef<HTMLInputElement | null>(null)
   const onChangeNavColor = ({id = 0}: any) => {
     const newTheme = id && navInfoSide.find((item: any) => item.id === id)
                       ? navInfoSide.find((item: any) => item?.id === id)?.theme
@@ -49,6 +51,12 @@ const TApp: React.FC = (props: any) => {
     if (linkTo) {
       setPage(linkTo)
     }
+  }
+  const toggleAdding = (status: any) => {
+
+    console.log(inputRef.current, adding,'add')
+    // setAdding(!adding)
+    setAdding(true)
   }
   useEffect(() => {
     const info: any = [
@@ -64,10 +72,17 @@ const TApp: React.FC = (props: any) => {
     setNavInfoSide(info)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[page, projects])
+  useEffect(()=> {
+    // if (inputRef.current && adding) {
+    //   inputRef.current.focus()
+    // }
+  }, [adding])
   return (
     <Router>
       <Navs onClickFunc={onChangeSideNav} navInfo={navInfo} type="row" />
-      <Navs onClickFunc={onChangeNavColor}  navInfo={navInfoSide} type="column" />
+      <Navs onClickFunc={onChangeNavColor}  navInfo={navInfoSide} type="column">
+        <div className='tab add' onClick={toggleAdding}> ＋ </div>
+      </Navs>
       <div className="container">
         <Switch>
           <Route path='/todo'>

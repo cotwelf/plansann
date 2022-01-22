@@ -25,7 +25,7 @@ export interface INav {
 }
 
 
-export const Navs: React.FC<INav> = ({ navInfo, type, onClickFunc, state }) => {
+export const Navs: React.FC<INav> = ({ navInfo, type, onClickFunc, children }) => {
   const onClickFunction = onClickFunc ? onClickFunc : () => {}
   return (
     <div className={classNames('nav', type)}>
@@ -44,6 +44,7 @@ export const Navs: React.FC<INav> = ({ navInfo, type, onClickFunc, state }) => {
         to={nav.linkTo}
         >{nav.name}</NavLink>
       ))}
+      {children}
     </div>
   )
 }
