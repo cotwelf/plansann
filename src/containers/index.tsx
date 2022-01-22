@@ -31,11 +31,11 @@ const mapDispatchToProps = (dispatch: any) => bindActionCreators({
 
 const TApp: React.FC = (props: any) => {
   const { navInfo, changeNavColor, defaultTheme, projects } = props
-  const [ page, setPage ] = useState(window.location.pathname.split('/')[1])
+  const [ page, setPage ] = useState(`/${window.location.pathname.split('/')[1]}`)
   const defaultSideNav = [{
     name: '全部',
     theme: defaultTheme,
-    linkTo: `/${page}/`,
+    linkTo: `${page}`,
     exact: true,
   }]
   const [ navInfoSide, setNavInfoSide ] = useState(defaultSideNav)
@@ -47,23 +47,23 @@ const TApp: React.FC = (props: any) => {
   }
   const onChangeSideNav = ({linkTo}: any) => {
     if (linkTo) {
-      setPage(linkTo.substr(1))
+      setPage(linkTo)
     }
+  }
+  useEffect(() => {
     const info: any = [
       ...defaultSideNav,
       ...projects.map(({ id, name, theme = defaultTheme }: any) => ({
         id,
         name,
         theme,
-        linkTo: `/${page}/${id}`
+        linkTo: `${page}/${id}`
       }))
     ]
+    changeNavColor(defaultTheme)
     setNavInfoSide(info)
-  }
-  useEffect(() => {
-    onChangeSideNav("")
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[projects])
+  },[page, projects])
   return (
     <Router>
       <Navs onClickFunc={onChangeSideNav} navInfo={navInfo} type="row" />

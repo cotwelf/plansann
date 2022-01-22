@@ -44,7 +44,6 @@ const initialState: IState = {
 export const reducer: Reducer<IState> = (
   state: IState = initialState, action: IRootAction
 ): IState => {
-  console.log(action.payload,'pay')
   switch (action.type) {
     case UPDATE_THEME:
       return {
