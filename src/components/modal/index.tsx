@@ -1,33 +1,62 @@
 import classNames from 'classnames'
 import './style.scss'
-import store from "../../store"
 import { connect } from "react-redux"
+import { IRootState } from '../../modules'
+import { bindActionCreators } from 'redux'
+import { toggleModal } from '../../modules/modal'
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: IRootState) => ({
   modal: state.modal
 })
-const mapDispatchToProps = () => ({
-  // closeModal:
-})
-const TModal: React.FC<any> = ({ modal }) => {
+const mapDispatchToProps = (dispatch: any) => bindActionCreators({
+  toggleModal: toggleModal,
+}, dispatch)
+
+const TModal: React.FC<any> = ({ modal, toggleModal }) => {
   const onClose = () => {
-    store.dispatch({ type: 'HIDE_MODAL'})
+    toggleModal(undefined,false)
   }
   const closeModal = (e: any) => {
     if (e.target.classList.contains('modal')) {
       onClose()
     }
   }
+  const onConfirm = () => {
+    if (modal.opts.btnConfirm.closeFunc) {
+      modal.opts.btnConfirm.closeFunc()
+    }
+    onClose()
+  }
+  const onCancel = () => {
+    if (modal.opts.btnCancel.closeFunc) {
+      modal.opts.btnCancel.closeFunc()
+    }
+    onClose()
+  }
   return (
-    <div className={classNames('modal', {show: modal.status})} onClick={(e) => closeModal(e)}>
+    <div className={classNames('modal', {show: modal.show})} onClick={(e) => closeModal(e)}>
       <div className='content'>
         <div className='header'>
           {!!modal.opts?.title && <div className='title'>{modal.opts.title}</div> }
           <div className='close' onClick={onClose} />
         </div>
-        {!!modal.opts?.content && <div className='body'>
-          {modal.opts.content}
-        </div>}
+        {!!modal.opts?.content && (
+          <div className='body'>
+            {modal.opts.content}
+          </div>
+        )}
+        <div className='footer'>
+          {modal.opts?.btnCancel && (
+            <div className='btn cancel' onClick={onCancel}>
+              {modal.opts.btnCancel.text || ''}
+            </div>
+          )}
+          {modal.opts?.btnConfirm && (
+            <div className='btn confirm' onClick={onConfirm}>
+              {modal.opts.btnConfirm.text || ''}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

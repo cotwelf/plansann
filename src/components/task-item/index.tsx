@@ -1,9 +1,20 @@
 import React, { useState } from 'react'
 import classNames from 'classnames'
-import { toggleModal } from '../../utils/base'
 import './style.scss'
+import { connect } from 'react-redux'
+import { IRootState } from '../../modules'
+import { bindActionCreators } from 'redux'
+import { toggleModal } from '../../modules/modal'
 
-export const TaskItem: React.FC<any> = ({ status, name, per, unit }) => {
+const mapStateToProps = (state: IRootState) => ({
+  showModal: state.modal.show,
+  modalOpts: state.modal.opts,
+})
+
+const mapDispatchToProps = (dispatch: any) => bindActionCreators({
+  toggleModal: toggleModal
+}, dispatch)
+const ITaskItem: React.FC<any> = ({ status, name, per, unit, toggleModal }) => {
   const [done, setDone] = useState()
   const onDoneChange = (e: any) => {
     if (typeof e.target.value === 'number' && e.target.value < 999) {
@@ -13,14 +24,24 @@ export const TaskItem: React.FC<any> = ({ status, name, per, unit }) => {
     }
   }
   const doTask = () => {
+    console.log(toggleModal,'toggleModal')
     toggleModal({
       title: '恭喜完成',
+      btnCancel: {
+        text: '取消',
+        closeFunc: () => {console.log('close')}
+      },
+      btnConfirm: {
+        text: '取消',
+        closeFunc: () => {console.log('close')}
+      },
       content: (
         <React.Fragment>
           本次完成
           <input value={done} onChange={(e) => onDoneChange(e)}/>
         </React.Fragment>
-      )
+      ),
+
     })
   }
   return (
@@ -32,3 +53,5 @@ export const TaskItem: React.FC<any> = ({ status, name, per, unit }) => {
     </div>
   )
 }
+
+export const TaskItem = connect(mapStateToProps, mapDispatchToProps)(ITaskItem)

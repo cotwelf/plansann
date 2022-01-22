@@ -1,3 +1,4 @@
+@import '../../style/variable.scss';
 .modal {
   $modal-background-color: rgba(0, 0, 0, .5);
   display: flex;
@@ -22,6 +23,33 @@
   &.show {
     opacity: 1;
     pointer-events: auto;
+    .content {
+      .header {
+        height: 15vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .footer {
+        margin-bottom: 6vw;
+        position: absolute;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-evenly;
+        .btn.confirm {
+          height: 8vw;
+          background-color: #ff8351;
+          color: white;
+        }
+        .btn.cancel {
+          height: calc(8vw - 2px);
+          border: 1px solid #ff8351;
+          color: $color-black-base;
+        }
+      }
+    }
   }
 }
 

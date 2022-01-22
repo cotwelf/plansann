@@ -22,7 +22,7 @@ const mapStateToProps = (state: IRootState) => {
     navInfo,
     projects: state.projects,
     defaultTheme: state.nav.defaultTheme,
-    themeColor: state.nav.themeColor
+    themeColor: state.nav.themeColor,
   }
 }
 const mapDispatchToProps = (dispatch: any) => bindActionCreators({
@@ -81,7 +81,7 @@ const TApp: React.FC = (props: any) => {
     <Router>
       <Navs onClickFunc={onChangeSideNav} navInfo={navInfo} type="row" />
       <Navs onClickFunc={onChangeNavColor}  navInfo={navInfoSide} type="column">
-        <div className='tab add' onClick={toggleAdding}> ＋ </div>
+        <div className='tab add' style={{background: 'pink'}} onClick={toggleAdding}> ＋ </div>
       </Navs>
       <div className="container">
         <Switch>
