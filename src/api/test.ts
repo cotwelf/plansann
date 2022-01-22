@@ -6,7 +6,7 @@ export const createProjectApi = ({ name, theme }: any) => {
     const newProjects = [
       ...projects,
       {
-        id: projects.length + 1,
+        id: Date.now(),
         name,
         theme,
         create_at: moment().second(),

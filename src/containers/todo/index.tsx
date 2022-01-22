@@ -4,6 +4,7 @@ import { connect } from "react-redux"
 import { IRootState } from "../../modules"
 
 const mapStateToProps = (state: IRootState) => {
+  console.log(state)
   const navInfoSide = state.projects.map(({ id, name, theme = state.nav.defaultTheme }) => ({
     id,
     name,
