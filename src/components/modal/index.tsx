@@ -24,9 +24,12 @@ const TModal: React.FC<any> = ({ modal, toggleModal }) => {
   }
   const onConfirm = () => {
     if (modal.opts.btnConfirm.closeFunc) {
-      modal.opts.btnConfirm.closeFunc()
+      modal.opts.btnConfirm.closeFunc().then(()=>{
+        onClose()
+      })
+    } else {
+      onClose()
     }
-    onClose()
   }
   const onCancel = () => {
     if (modal.opts.btnCancel && modal.opts.btnCancel.closeFunc) {
@@ -34,9 +37,6 @@ const TModal: React.FC<any> = ({ modal, toggleModal }) => {
     }
     onClose()
   }
-  useEffect(() => {
-    console.log(modal,'mmmmm')
-  })
   return (
     <div className={classNames('modal', {show: modal.show})} onClick={closeModal}>
       <div className='content'>

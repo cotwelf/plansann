@@ -3,7 +3,6 @@ import { TaskItem } from '../../components'
 import { fetchPlans } from '../../api/test'
 export const Mine: React.FC = (props) => {
   const check = () => {
-    fetchPlans().then(res => console.log(res))
   }
   return (
     <React.Fragment>

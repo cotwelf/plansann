@@ -34,3 +34,36 @@
     }
   }
 }
+
+.toast {
+  @keyframes toast {
+    0% {
+      bottom: 52vw;
+      opacity: 0;
+    }
+    10% {
+      bottom: 50vw;
+      opacity: 1;
+    }
+    80% {
+      bottom: 50vw;
+      opacity: 1;
+    }
+    100% {
+      bottom: 45vw;
+      opacity: 0;
+    }
+  }
+  position: absolute;
+  background: $color-modal;
+  color: white;
+  z-index: 999;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 12px;
+  border-radius: 2px;
+  bottom: 50vw;
+  opacity: 0;
+  animation: 2s toast linear;
+  font-size: 12px;
+}

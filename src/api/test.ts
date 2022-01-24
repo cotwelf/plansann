@@ -15,7 +15,7 @@ export const createProjectApi = ({ name, theme }: any) => {
       {
         id: Date.now(),
         name,
-        theme,
+        theme: JSON.stringify(theme),
         create_at: moment().second(),
         status: 1
       },
@@ -39,16 +39,8 @@ export const fetchProjectsData = () => {
     if (projects) {
       newProjects = JSON.parse(projects)
       if (newProjects.length > 0) {
-        getThemeList().then((res: any) => {
-          newProjects.forEach((item: any) => {
-            const themeNumber = item.theme.toString().split('.')
-            const color = res.filter((r: any) => r.id === themeNumber[0]*1)[0]
-            item.theme = {
-              normal: color ? color.normal: '',
-              active: color ? color.active : '',
-              type: color ? color.type : '',
-            }
-          })
+        newProjects.forEach((item: any) => {
+          item.theme = JSON.parse(item.theme)
         })
       }
     }

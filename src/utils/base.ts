@@ -1,5 +1,9 @@
-import store from '../store'
-
-export const toggleModal = ({ content, title }: any) => {
-  store.dispatch({ type: 'SHOW_MODAL', payload: {content, title} })
+export const toggleToast = (message: any) => {
+  const toast = document.createElement('div')
+  toast.classList.add('toast')
+  toast.innerHTML = message
+  document.body.appendChild(toast)
+  setTimeout(()=> {
+    document.body.removeChild(toast)
+  }, 3000)
 }
