@@ -1,0 +1,25 @@
+@import './variable';
+.btn {
+  border-radius: 4px;
+  padding: 0 5vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+input {
+  outline: none;
+  border: none;
+  padding: 2vw;
+  transition: border-color .2s;
+  border-bottom: 1px solid $color-grey-base;
+  &.empty {
+    border-bottom: 1px solid $color-red-light;
+  }
+}
+
+.shine {
+  border: 1px solid #ffe3d0;
+  box-shadow: 0 0 6px #ffc56d;
+}

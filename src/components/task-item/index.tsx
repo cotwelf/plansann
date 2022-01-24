@@ -24,15 +24,12 @@ const ITaskItem: React.FC<any> = ({ status, name, per, unit, toggleModal }) => {
     }
   }
   const doTask = () => {
-    console.log(toggleModal,'toggleModal')
     toggleModal({
       title: '恭喜完成',
       btnCancel: {
-        text: '取消',
         closeFunc: () => {console.log('close')}
       },
       btnConfirm: {
-        text: '取消',
         closeFunc: () => {console.log('close')}
       },
       content: (
@@ -41,7 +38,6 @@ const ITaskItem: React.FC<any> = ({ status, name, per, unit, toggleModal }) => {
           <input value={done} onChange={(e) => onDoneChange(e)}/>
         </React.Fragment>
       ),
-
     })
   }
   return (

@@ -9,7 +9,11 @@ export const toggleModal = (opts: IModalOpts, show: boolean = true) => {
     type: actionType,
     payload: {
       show,
-      opts,
+      opts: {
+        ...opts,
+        noBtn: opts?.noBtn || false,
+        type: opts?.type || 'message',
+      },
     }
   }
 }

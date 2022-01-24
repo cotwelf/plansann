@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
+import classNames from 'classnames'
 import {
   BrowserRouter as Router,
   Switch,
@@ -14,6 +15,8 @@ import { connect } from "react-redux"
 import { IRootState } from "../modules/"
 import { changeNavColor } from "../modules/nav"
 import { bindActionCreators } from "redux"
+import { toggleModal } from "../modules/modal"
+import { themeListApi } from "../api/test"
 
 const mapStateToProps = (state: IRootState) => {
   const navInfo = state.nav.topNav
@@ -27,10 +30,11 @@ const mapStateToProps = (state: IRootState) => {
 }
 const mapDispatchToProps = (dispatch: any) => bindActionCreators({
   changeNavColor: changeNavColor,
+  toggleModal: toggleModal,
 }, dispatch)
 
 const TApp: React.FC = (props: any) => {
-  const { navInfo, changeNavColor, defaultTheme, projects } = props
+  const { navInfo, changeNavColor, defaultTheme, projects, toggleModal } = props
   const [ page, setPage ] = useState(`/${window.location.pathname.split('/')[1]}`)
   const defaultSideNav = [{
     name: '全部',
@@ -39,8 +43,10 @@ const TApp: React.FC = (props: any) => {
     exact: true,
   }]
   const [ navInfoSide, setNavInfoSide ] = useState(defaultSideNav)
-  const [ adding, setAdding ] = useState(false)
-  const inputRef = useRef<HTMLInputElement | null>(null)
+  const [ projectName, setProjectName ] = useState('')
+  const [ projectTheme, setProjectTheme ] = useState('')
+  const projectNameRef = useRef<HTMLInputElement | null>(null)
+  // const colorRef = useRef<HTMLInputElement | any>(null)
   const onChangeNavColor = ({id = 0}: any) => {
     const newTheme = id && navInfoSide.find((item: any) => item.id === id)
                       ? navInfoSide.find((item: any) => item?.id === id)?.theme
@@ -52,11 +58,59 @@ const TApp: React.FC = (props: any) => {
       setPage(linkTo)
     }
   }
-  const toggleAdding = (status: any) => {
+  const onProjectNameChange = (e: any) => {
+    let name = e.target.value.toString().replace(/\r?\n/g, '')
+    if (name.length >= 8) {
+      name = name.substring(0, 7)
+    }
+    if (name) {
+      projectNameRef.current?.classList.remove('empty')
+    } else {
+      projectNameRef.current?.classList.add('empty')
+    }
+    e.target.value = name
+    setProjectName(name)
+  }
 
-    console.log(inputRef.current, adding,'add')
-    // setAdding(!adding)
-    setAdding(true)
+  const toggleAdding = () => {
+    let themeList = ''
+    themeListApi().then((r: any) => {
+      const choseTheme = (color: any, e: any) => {
+        const eleArr = e.target.parentElement.parentElement.children
+        for (let i = 0; i < eleArr.length; i++) {
+          eleArr[i].classList.remove('shine')
+        }
+        e.target.parentNode.classList.add('shine')
+        setProjectTheme(color)
+      }
+      themeList = r.map((item: any, index: number) => {
+        return (
+          <div className={classNames("color-box", {shine: index === 0})} key={item.id} onClick={(e) => choseTheme(item, e)}>
+            <span className="color a" style={{background: item.active}}></span>
+            <span className="color b" style={{background: item.normal}}></span>
+          </div>
+        )
+      })
+      toggleModal({
+        title: '新增项目分类',
+        type: 'confirm',
+        btnConfirm: {
+          closeFunc: () => {}
+        },
+        content: (
+          <div className="create-project">
+            <input
+              ref={projectNameRef}
+              className='name empty'
+              placeholder='请输入项目名称。如"英语"'
+              onChange={onProjectNameChange}
+            />
+            <div className="color-select">{themeList}</div>
+          </div>
+        ),
+      })
+    })
+
   }
   useEffect(() => {
     const info: any = [
@@ -72,16 +126,11 @@ const TApp: React.FC = (props: any) => {
     setNavInfoSide(info)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[page, projects])
-  useEffect(()=> {
-    // if (inputRef.current && adding) {
-    //   inputRef.current.focus()
-    // }
-  }, [adding])
   return (
     <Router>
       <Navs onClickFunc={onChangeSideNav} navInfo={navInfo} type="row" />
       <Navs onClickFunc={onChangeNavColor}  navInfo={navInfoSide} type="column">
-        <div className='tab add' style={{background: 'pink'}} onClick={toggleAdding}> ＋ </div>
+        <div className='tab add' onClick={toggleAdding}> ＋ </div>
       </Navs>
       <div className="container">
         <Switch>

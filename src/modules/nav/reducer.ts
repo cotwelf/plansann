@@ -32,10 +32,14 @@ const initialState: IState = {
     }
   ],
   themeColor: {
+    // normal: '#ecced3',
+    // active: '#b17a7d',
     normal: '#fdbaa8',
     active: '#ff7c7c',
   },
   defaultTheme: {
+    // normal: '#ecced3',
+    // active: '#b17a7d',
     normal: '#fdbaa8',
     active: '#ff7c7c',
   }

@@ -1,14 +1,36 @@
+@import '../style/base.scss';
+@import '../style/variable.scss';
+
 #root {
   .nav.column .tab.add {
-    background: #d9d9d9;
+    background: $color-grey-base;
   }
+  .modal {
+    .create-project {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      .name {
+        width: 80%;
+      }
+      .color-select {
+        display: flex;
+        justify-content: space-evenly;
+        width: 80%;
+        margin-top: 3vw;
+        .color-box {
+          height: 5vw;
+          border-radius: 10px;
+          overflow: hidden;
+          transition: box-shadow .3s;
 
-  .btn {
-    border-radius: 4px;
-    padding: 0 5vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
+        }
+        .color {
+          width: 5vw;
+          height: 5vw;
+        }
+      }
+    }
   }
 }

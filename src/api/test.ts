@@ -1,5 +1,12 @@
 import moment from 'moment'
 
+export  const themeListApi = () => {
+  return new Promise((resolve) => {
+    const themeList = JSON.parse(localStorage.getItem('theme') || '[]')
+    resolve(themeList)
+  })
+}
+
 export const createProjectApi = ({ name, theme }: any) => {
   return new Promise((resolve) => {
     const projects = JSON.parse(localStorage.getItem('projects') || '[]')

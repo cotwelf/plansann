@@ -8,11 +8,13 @@ interface IBtn {
 }
 
 export interface IModalOpts {
-  type?: 'success' | 'normal' | 'error'
+  style?: 'success' | 'error'
+  type?: 'message' | 'confirm'
   content?: any // 除 title 和【按钮】之外的内容(可能自定义 title 之类的)
   title?: any // title
   btnCancel?: IBtn
   btnConfirm?: IBtn
+  noBtn?: boolean
 }
 
 export type IState = {
