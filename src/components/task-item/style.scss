@@ -16,3 +16,18 @@
     }
   }
 }
+
+.modal {
+  .content {
+    height: 60vw;
+    .body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .task-name {
+        margin-bottom: 3vw;
+        font-size: 1.5rem;
+      }
+    }
+  }
+}

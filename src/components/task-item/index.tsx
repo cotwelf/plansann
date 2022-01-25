@@ -27,15 +27,35 @@ const ITaskItem: React.FC<any> = ({ status, name, per, unit, toggleModal }) => {
     toggleModal({
       title: '恭喜完成',
       btnCancel: {
-        closeFunc: () => {console.log('close')}
+        text: 'dbq 手滑',
+        closeFunc: () => {
+          return new Promise((resolve) => {
+            console.log('close')
+            resolve('')
+          })
+        }
       },
       btnConfirm: {
-        closeFunc: () => {console.log('close')}
+        text: '我好棒~',
+        closeFunc: () => {
+          return new Promise((resolve) => {
+            console.log('close')
+            resolve('')
+          })
+        }
       },
       content: (
         <React.Fragment>
-          本次完成
-          <input value={done} onChange={(e) => onDoneChange(e)}/>
+          <div className='task-name'>{name}</div>
+          <div>
+            <input
+              className='task-done'
+              value={done}
+              placeholder='请输入数字'
+              onChange={(e) => onDoneChange(e)}
+            />
+            <span className='task-unit'>{unit}</span>
+          </div>
         </React.Fragment>
       ),
     })
