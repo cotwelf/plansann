@@ -14,21 +14,17 @@
   opacity: 0;
   background-color: $modal-background-color;
   pointer-events: none;
-  .content {
-    position: relative;
-    .title {
-      border: none;
-    }
-  }
-  &.show {
-    opacity: 1;
-    pointer-events: auto;
+  pointer-events: auto;
     .content {
+      position: relative;
       .header {
         height: 15vw;
         display: flex;
         align-items: center;
         justify-content: center;
+        .title {
+          border: none;
+        }
       }
       .footer {
         margin-bottom: 6vw;
@@ -50,6 +46,8 @@
         }
       }
     }
+  &.show {
+    opacity: 1;
   }
 }
 

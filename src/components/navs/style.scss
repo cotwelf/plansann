@@ -25,13 +25,13 @@
     letter-spacing: 3px;
     .tab {
       padding: 3vw 6vw;
-      margin:0 2vw 0 -2vw;
+      margin-right:1vw;
       box-shadow: 2px 0 6px rgba(0, 0, 0, .2);
       writing-mode: vertical-rl;
       width: 6vw;
       &.active {
         position: relative;
-        left: -2vw;
+        left: -1.5vw;
         box-shadow: 2px 0 10px rgba(0, 0, 0, .4);
         width: 8.5vw;
         padding-top: 4vw;

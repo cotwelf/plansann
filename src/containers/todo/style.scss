@@ -1,0 +1,10 @@
+@import '../../style/variable.scss';
+.add-plan {
+  border: 1px dashed;
+  margin: 0 10vw 1vw 0;
+  height: 10vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
