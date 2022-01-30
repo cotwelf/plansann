@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch: any) => bindActionCreators({
 }, dispatch)
 
 const TApp: React.FC = (props: any) => {
-  const { navInfo, changeNavColor, defaultTheme, projects, toggleModal, updateProjects } = props
+  const { navInfo, changeNavColor, defaultTheme, projects, toggleModal, updateProjects, modal } = props
   const [ page, setPage ] = useState(`/${window.location.pathname.split('/')[1]}`)
   const defaultSideNav = [{
     name: '全部',
@@ -180,7 +180,7 @@ const TApp: React.FC = (props: any) => {
           <Redirect to='/todo' />
         </Switch>
       </div>
-      <Modal />
+      {modal.show && <Modal />}
     </Router>
   )
 }
