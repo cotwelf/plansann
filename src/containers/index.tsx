@@ -62,10 +62,10 @@ const TApp: React.FC = (props: any) => {
   }
 
   const toggleAdding = () => {
-    if (projects.length >= 3) {
-      toggleToast('请不要同时进行 3 个以上项目哦~')
-      return
-    }
+    // if (projects.length >= 3) {
+    //   toggleToast('请不要同时进行 3 个以上项目哦~')
+    //   return
+    // }
     let projectTheme:any = null
     let projectName:string = ''
     let themeList = ''

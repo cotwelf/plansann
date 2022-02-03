@@ -4,7 +4,6 @@ import { connect } from "react-redux"
 import { IRootState } from '../../modules'
 import { bindActionCreators } from 'redux'
 import { toggleModal } from '../../modules/modal'
-import { useEffect } from 'react'
 
 const mapStateToProps = (state: IRootState) => ({
   modal: state.modal
@@ -14,6 +13,7 @@ const mapDispatchToProps = (dispatch: any) => bindActionCreators({
 }, dispatch)
 
 const TModal: React.FC<any> = ({ modal, toggleModal }) => {
+  console.log(modal, 'modal')
   const onClose = () => {
     toggleModal(undefined, false)
   }
@@ -38,7 +38,7 @@ const TModal: React.FC<any> = ({ modal, toggleModal }) => {
     onClose()
   }
   return (
-    <div className={classNames('modal', {show: modal.show})} onClick={closeModal}>
+    <div className={classNames('modal', { show: modal.show })} onClick={closeModal}>
       <div className='content'>
         <div className='header'>
           {!!modal.opts?.title && <div className='title'>{modal.opts.title}</div> }
