@@ -5,6 +5,9 @@
   }
   .weekly {
     border: 1px solid $color-red-light;
+    margin: 0 .5vw;
+    padding: 0 .5vw;
+    border-radius: 4px;
     &.selected {
       background-color: $color-red-light;
       color: white;
