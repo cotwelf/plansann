@@ -33,7 +33,7 @@ export const reducer: Reducer<IState> = (
     case SHOW_MODAL:
       return { ...state, show: action.payload.show, opts: action.payload.opts }
     case HIDE_MODAL:
-      return { ...state, show: action.payload.show, opts: undefined }
+      return { ...state, show: false, opts: undefined }
     default:
       return state
   }

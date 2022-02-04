@@ -8,6 +8,7 @@ import {
 } from "react-router-dom"
 import { Navs, Modal } from '../components'
 import { Todo } from "./todo"
+import { NewPlan } from "./new-plan"
 import { Schedule } from "./schedule"
 import { Mine } from "./mine"
 import './main.scss'
@@ -173,6 +174,7 @@ const TApp: React.FC = (props: any) => {
           <Route path='/todo'>
             <Route path='/:id' component={Todo}/>
           </Route>
+          <Route path='/plan/new' component={NewPlan} />
           <Route path='/schedule'>
             <Route path='/:id' component={Schedule}/>
           </Route>

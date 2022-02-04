@@ -1,0 +1,13 @@
+@import '../../style/variable.scss';
+.new-plan {
+  * {
+    display: inline-block;
+  }
+  .weekly {
+    border: 1px solid $color-red-light;
+    &.selected {
+      background-color: $color-red-light;
+      color: white;
+    }
+  }
+}
