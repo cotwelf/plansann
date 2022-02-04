@@ -13,7 +13,6 @@ const mapDispatchToProps = (dispatch: any) => bindActionCreators({
 }, dispatch)
 
 const TModal: React.FC<any> = ({ modal, toggleModal }) => {
-  console.log(modal,'modal')
   const onClose = () => {
     toggleModal(undefined, false)
   }
