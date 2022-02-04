@@ -10,6 +10,7 @@ interface IBtn {
 export interface IModalOpts {
   style?: 'success' | 'error'
   type?: 'message' | 'confirm'
+  classNames?: string
   content?: any // 除 title 和【按钮】之外的内容(可能自定义 title 之类的)
   title?: any // title
   btnCancel?: IBtn

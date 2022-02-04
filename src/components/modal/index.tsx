@@ -13,7 +13,7 @@ const mapDispatchToProps = (dispatch: any) => bindActionCreators({
 }, dispatch)
 
 const TModal: React.FC<any> = ({ modal, toggleModal }) => {
-  console.log(modal, 'modal')
+  console.log(modal,'modal')
   const onClose = () => {
     toggleModal(undefined, false)
   }
@@ -38,7 +38,10 @@ const TModal: React.FC<any> = ({ modal, toggleModal }) => {
     onClose()
   }
   return (
-    <div className={classNames('modal', { show: modal.show })} onClick={closeModal}>
+    <div
+      className={classNames(`modal${modal.opts.classNames ? ` ${modal.opts.classNames}` : ''}`, { show: modal.show })}
+      onClick={closeModal}
+    >
       <div className='content'>
         <div className='header'>
           {!!modal.opts?.title && <div className='title'>{modal.opts.title}</div> }

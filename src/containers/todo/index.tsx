@@ -36,6 +36,7 @@ export const TTodo: React.FC = ({ navInfo, toggleModal, themeColor, changeNavCol
     toggleModal({
       title: '创建计划',
       noBtn: true,
+      classNames: 'new-plan',
       content: (
         <NewPlan />
       ),
