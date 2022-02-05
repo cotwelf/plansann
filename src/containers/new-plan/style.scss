@@ -3,11 +3,18 @@
   * {
     display: inline-block;
   }
+  input {
+    min-width: 11vw;
+    padding: 0 2px;
+    margin: 0 2px;
+    max-width: 36px;
+  }
   .weekly {
     border: 1px solid $color-red-light;
     margin: 0 .5vw;
     padding: 0 .5vw;
     border-radius: 4px;
+    line-height: 5vw;
     &.selected {
       background-color: $color-red-light;
       color: white;

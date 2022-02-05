@@ -52,22 +52,24 @@ const TNewPlan: React.FC = ({ toggleModal }: any) => {
   return (
     <Fragment>
       <div className='new-plan'>
-      <span>我计划</span>
-      <input placeholder={startTime} type="date" onChange={onStartTimeChange} />
-      至
-      <input placeholder="2022-12-30" type="date" onChange={onEndTimeChange} />
-      <input placeholder={planData.name} onChange={onNameChange} />
-      <input placeholder="300" onChange={onTotalChange} type='number' />
-      <input placeholder={planData.unit} onChange={onUnitChange} />，
-      每周
-      {weekly.map(item => (
-        <span
-          key={item.id}
-          className={classNames('weekly', { selected: item.selected })}
-          onClick={() => onWeekClick(item)}
-        >{item.name}</span>
-      ))}
-      执行。
+      <p>
+        <span>我计划</span>
+        <input className='date-time' placeholder={startTime} type="date" onChange={onStartTimeChange} />
+        至
+        <input className='date-time' placeholder="2022-12-30" type="date" onChange={onEndTimeChange} />
+        <input placeholder={planData.name} onChange={onNameChange} />
+        <input placeholder="300" onChange={onTotalChange} type='number' />
+        <input placeholder={planData.unit} onChange={onUnitChange} />，
+        每周
+        {weekly.map(item => (
+          <span
+            key={item.id}
+            className={classNames('weekly', { selected: item.selected })}
+            onClick={() => onWeekClick(item)}
+          >{item.name}</span>
+        ))}
+        执行。
+      </p>
       <p>
         当有多个计划同时进行的时候，我
         <select>
