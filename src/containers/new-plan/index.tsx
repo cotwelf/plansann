@@ -7,9 +7,12 @@ import { toggleModal } from "../../modules/modal"
 import { LEVEL, WEEKLY } from "./const"
 import './style.scss'
 import { countWorkDays, toggleToast } from "../../utils"
-const mapStateToProps = (state: any) => ({
-  projects: state.projects
-})
+const mapStateToProps = (state: any) => {
+  console.log(state)
+  return ({
+    projects: state.projects
+  })
+}
 const mapDispatchToProps = (dispatch: any) => bindActionCreators({
   toggleModal: toggleModal,
 }, dispatch)
@@ -20,7 +23,7 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
   const [todoCalendar, setTodoCalendar] = useState([todayTs])
   const [isCompositioned, setIsCompositioned] = useState(false)
   const [planData, setPlanData] = useState({
-    project_id: projects[0].id,
+    projectId: projects[0].id,
     name: '',
     per: 0,
     unit: '',
@@ -29,6 +32,7 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
     total: '',
     startAt: todayTs,
     finishAt: todayTs,
+    status: 0,
   })
   const onWeekClick = (item: any) => {
     const newItem = {
@@ -44,6 +48,10 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
     setCurrentWeekly(newList)
   }
   const onClose = () => {
+    setPlanData({
+      ...planData,
+      status: -2,
+    })
     toggleModal({}, false)
   }
   const onConfirm = () => {
@@ -70,7 +78,7 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
   const onProjectChange = (e: any) => {
     setPlanData({
       ...planData,
-      project_id: e.target.value,
+      projectId: e.target.value,
     })
   }
   const onTimeChange = (key: string, e: any) => {

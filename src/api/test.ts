@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { countWorkDays } from '../utils'
 
 export  const themeListApi = () => {
   return new Promise((resolve) => {
@@ -31,6 +32,48 @@ export const fetchPlans = () => {
     resolve(JSON.parse(localStorage.getItem('plans') || '[]'))
   })
 }
+
+export const createPlan = (planData: any) => new Promise((resolve) => {
+  // 添加计划
+  const planList = JSON.parse(localStorage.getItem('plans') || '[]')
+  const planId = Date.now()
+  const newPlan = [
+    ...planList,
+    {
+      id: planId,
+      project_id: planData.projectId,
+      name: planData.name,
+      per: planData.per,
+      unit: planData.unit,
+      weekly: JSON.stringify(planData.weekly),
+      level: planData.level,
+      total: planData.total,
+      start_at: planData.startAt,
+      finish_at: planData.finishAt,
+      status: moment(moment().format("YYYY-MM-DD")) < planData.startAt ? 0 : 1
+    },
+  ]
+  localStorage.setItem('plans', JSON.stringify(newPlan))
+  // 增加 record 记录
+  const record = JSON.parse(localStorage.getItem('records') || '[]')
+  const days = countWorkDays(planData.startAt, planData.finishAt, planData.weekly)
+  const recordList: any = []
+  days.forEach(i=> {
+    recordList.push({
+      id: Date.now(),
+      plan_id: planId,
+      todo_at: i,
+      total: planData.per,
+      done: 0,
+      status: 0,
+    })
+  })
+  localStorage.setItem('records', JSON.stringify([
+    ...record,
+    ...recordList,
+  ]))
+  resolve({ code: 1, success: true})
+})
 
 export const fetchProjectsData = () => {
   return new Promise((resolve) => {

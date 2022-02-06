@@ -1,6 +1,5 @@
 import React from "react"
 import { TaskItem } from '../../components'
-import { fetchPlans } from '../../api/test'
 export const Mine: React.FC = (props) => {
   const check = () => {
   }
