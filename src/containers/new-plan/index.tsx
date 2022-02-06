@@ -1,7 +1,7 @@
 import { bindActionCreators } from "redux"
 import classNames from "classnames"
 import moment from 'moment'
-import React, { Fragment, useState } from "react"
+import React, { Fragment, useEffect, useState } from "react"
 import { connect } from "react-redux"
 import { toggleModal } from "../../modules/modal"
 import { WEEKLY } from "./const"
@@ -18,12 +18,12 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
   const [currentWeekly, setCurrentWeekly] = useState(WEEKLY)
   const [planData, setPlanData] = useState({
     project_id: 0,
-    name: '背单词',
+    name: '',
     per: 0,
-    unit: '个',
+    unit: '',
     weekly: [2, 4, 6],
     level: 1,
-    total: 300,
+    total: '',
     startAt: moment().valueOf() / 1000,
     finishAt: moment().valueOf() / 1000,
   })
@@ -60,22 +60,52 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
       ...planData,
       ...thisTime,
     }
-
     if(newData.startAt > newData.finishAt) {
+      if(key === 'startAt') {
+        setPlanData({
+          ...newData,
+          finishAt: newData.startAt,
+        })
+        return
+      }
       toggleToast('结束时间不能小于开始时间')
       return
     }
     setPlanData(newData)
   }
   const onNameChange = (e: any) => {
-
+    let name = e.target.value.replace(/\r?\n/g, '')
+    if (name.length >= 8) {
+      name = name.substring(0, 8)
+    }
+    setPlanData({
+      ...planData,
+      name,
+    })
   }
   const onTotalChange = (e: any) => {
-
+    let total = e.target.value
+    if (total.length >= 4) {
+      total = total.substring(0, 4)
+    }
+    setPlanData({
+      ...planData,
+      total,
+    })
   }
   const onUnitChange = (e: any) => {
-
+    let unit = e.target.value
+    if (unit.length >= 2) {
+      unit = unit.substring(0, 2)
+    }
+    setPlanData({
+      ...planData,
+      unit,
+    })
   }
+  useEffect(() => {
+    console.log(planData)
+  }, [planData])
   return (
     <Fragment>
       <div className='new-plan'>
@@ -88,9 +118,25 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
         <input className='date-time' value={moment(planData.startAt * 1000).format('YYYY-MM-DD')} type="date" onChange={(e) => onTimeChange('startAt', e)} />
         至
         <input className='date-time' value={moment(planData.finishAt * 1000).format('YYYY-MM-DD')} type="date" onChange={(e) => onTimeChange('finishAt', e)} />
-        <input className='name' placeholder={planData.name} onChange={onNameChange} />
-        <input className='total' placeholder="300" onChange={onTotalChange} type='number' />
-        <input className='unit' placeholder={planData.unit} onChange={onUnitChange} />，
+        <input
+          className='name'
+          placeholder={planData.name ? '' : '背单词'}
+          value={planData.name}
+          onChange={onNameChange}
+        />
+        <input
+          className='total'
+          placeholder={planData.total ? '' : '300'}
+          value={planData.total}
+          onChange={onTotalChange}
+          type='number'
+        />
+        <input
+          className='unit'
+          placeholder={planData.unit ? '' : '个'}
+          value={planData.unit}
+          onChange={onUnitChange}
+        />，
         每周
         {currentWeekly.map(item => (
           <span

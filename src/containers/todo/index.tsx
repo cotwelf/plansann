@@ -6,7 +6,6 @@ import './style.scss'
 import { toggleModal } from "../../modules/modal"
 import { bindActionCreators } from "redux"
 import { changeNavColor } from "../../modules/nav"
-import { WEEKLY } from "../../utils/const"
 import classNames from "classnames"
 import { NewPlan } from "../new-plan"
 

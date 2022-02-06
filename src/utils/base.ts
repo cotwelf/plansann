@@ -7,3 +7,7 @@ export const toggleToast = (message: any) => {
     document.body.removeChild(toast)
   }, 3000)
 }
+
+export const countWorkDays = () => {
+  
+}
