@@ -4,7 +4,7 @@ import moment from 'moment'
 import React, { Fragment, useEffect, useRef, useState } from "react"
 import { connect } from "react-redux"
 import { toggleModal } from "../../modules/modal"
-import { WEEKLY } from "./const"
+import { LEVEL, WEEKLY } from "./const"
 import './style.scss'
 import { countWorkDays, toggleToast } from "../../utils"
 const mapStateToProps = (state: any) => ({
@@ -17,16 +17,14 @@ const mapDispatchToProps = (dispatch: any) => bindActionCreators({
 const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
   const todayTs = moment(moment().format('YYYY-MM-DD')).valueOf() / 1000
   const [currentWeekly, setCurrentWeekly] = useState(WEEKLY)
-  const [todoCalendar, setTodoCalendar] = useState([])
+  const [todoCalendar, setTodoCalendar] = useState([todayTs])
   const [isCompositioned, setIsCompositioned] = useState(false)
-  const nameRef: any = useRef(null)
-  const unitRef: any = useRef(null)
   const [planData, setPlanData] = useState({
-    project_id: 0,
+    project_id: projects[0].id,
     name: '',
     per: 0,
     unit: '',
-    weekly: [2, 4, 6],
+    weekly: [moment(todayTs * 1000).day()],
     level: 1,
     total: '',
     startAt: todayTs,
@@ -46,7 +44,28 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
     setCurrentWeekly(newList)
   }
   const onClose = () => {
-    toggleModal({},false)
+    toggleModal({}, false)
+  }
+  const onConfirm = () => {
+    const {
+      name,
+      unit,
+      total,
+    } = planData
+    if(!name) {
+      toggleToast('你的计划菌还没有名字呢 qwq')
+      return
+    }
+    if(!total) {
+      toggleToast('你准备完成的工作量是多少呢')
+      return
+    }
+    if(!unit) {
+      toggleToast('请输入计划的计量单位，如单词 3 “个”')
+      return
+    }
+    console.log(planData,'data')
+    // toggleModal({}, false)
   }
   const onProjectChange = (e: any) => {
     setPlanData({
@@ -60,7 +79,7 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
       return
     }
     const thisTime: any = {}
-    thisTime[key] = moment(e.target.value).valueOf() / 1000
+    thisTime[key] = moment(e.target.value || (todayTs * 1000)).valueOf() / 1000
     const newData = {
       ...planData,
       ...thisTime,
@@ -78,9 +97,9 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
     }
     setPlanData(newData)
   }
-  const onNameChange = (e: any) => {
+  const onNameChange = (e: any, composition: boolean) => {
     let name = e.target.value.replace(/\r?\n/g, '')
-    if (!isCompositioned && name.length >= 8) {
+    if (!composition && name.length >= 8) {
       name = name.substring(0, 8)
     }
     setPlanData({
@@ -108,24 +127,43 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
       unit,
     })
   }
+  const onLevelChange = (e: any) => {
+    setPlanData({
+      ...planData,
+      level: e.target.value,
+    })
+  }
   useEffect(() => {
+    let calendar: any = countWorkDays(planData.startAt, planData.finishAt, planData.weekly)
+    if (calendar.length === 0) {
+      toggleToast('请至少选择一天可以完成任务')
+      calendar = [planData.startAt]
+      const weekOf = moment(planData.startAt * 1000).day()
+      setPlanData({
+        ...planData,
+        weekly: [weekOf]
+      })
+      currentWeekly.forEach(i => {
+        if (i.id === weekOf) {
+          i.selected = true
+        }
+      })
+      setCurrentWeekly(currentWeekly)
+    }
+    setTodoCalendar(calendar)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planData.startAt, planData.finishAt, planData.weekly, currentWeekly])
+  useEffect(() => {
+    currentWeekly.forEach(i => {
+      if(planData.weekly.includes(i.id)) {
+        i.selected = true
+      } else {
+        i.selected = false
+      }
+    })
+    setCurrentWeekly(currentWeekly)
     const calendar: any = countWorkDays(planData.startAt, planData.finishAt, planData.weekly)
     setTodoCalendar(calendar)
-  }, [planData.startAt, planData.finishAt, planData.weekly])
-  useEffect(() => {
-    const calendar: any = countWorkDays(planData.startAt, planData.finishAt, planData.weekly)
-    setTodoCalendar(calendar)
-    // TODO: 中文输入法下输入内容长度不准确的 bug
-    // const compositionStart = () => {
-    //   setIsCompositioned(true)
-    // }
-    // nameRef.current.addEventListener('compositionstart' , compositionStart)
-    // nameRef.current.addEventListener('compositionend' , onNameChange)
-    // unitRef.current.addEventListener('compositionstart' , compositionStart)
-    // unitRef.current.addEventListener('compositionend' , (e: any) => {
-    //   setIsCompositioned(false)
-    //   onUnitChange(e)
-    // })
   }, [])
   useEffect(() => {
     const data = currentWeekly.filter((i) => i.selected)
@@ -135,6 +173,12 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentWeekly])
+  useEffect(() => {
+    setPlanData({
+      ...planData,
+      per: Math.ceil(Number(planData.total) / (todoCalendar.length || 1) * 100) / 100,
+    })
+  }, [planData.total, todoCalendar])
   return (
     <Fragment>
       <div className='new-plan'>
@@ -144,15 +188,28 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
           {projects.map((p: any) => <option key={p.id} value={p.id} >{p.name}</option>)}
         </select>
         <span>，我计划</span>
-        <input className='date-time' value={moment(planData.startAt * 1000).format('YYYY-MM-DD')} type="date" onChange={(e) => onTimeChange('startAt', e)} />
+        <input
+          className='date-time'
+          value={moment(planData.startAt * 1000).format('YYYY-MM-DD')}
+          type="date"
+          onChange={(e) => onTimeChange('startAt', e)}
+        />
         至
-        <input className='date-time' value={moment(planData.finishAt * 1000).format('YYYY-MM-DD')} type="date" onChange={(e) => onTimeChange('finishAt', e)} />
+        <input
+          className='date-time'
+          value={moment(planData.finishAt * 1000).format('YYYY-MM-DD')}
+          type="date"
+          onChange={(e) => onTimeChange('finishAt', e)}
+        />
         <input
           className='name'
-          ref={nameRef}
           placeholder={planData.name ? '' : '背单词'}
           value={planData.name}
-          onChange={onNameChange}
+          onChange={(e) => onNameChange(e, true)}
+          onCompositionEnd={(e) => {
+            onNameChange(e, false)
+          }}
+          onCompositionStart={(e) => onNameChange(e, true)}
         />
         <input
           className='total'
@@ -163,10 +220,11 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
         />
         <input
           className='unit'
-          ref={unitRef}
           placeholder={planData.unit ? '' : '个'}
           value={planData.unit}
           onChange={onUnitChange}
+          onCompositionEnd={() => setIsCompositioned(false)}
+          onCompositionStart={() => setIsCompositioned(true)}
         />，
         {<span>每周
         {currentWeekly.map(item => (
@@ -180,22 +238,20 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
       </p>
       <p>
         当有多个计划同时进行的时候，我
-        <select>
-          <option value='1'>非常</option>
-          <option value='2'>一般</option>
-          <option value='3'>不太</option>
+        <select onChange={onLevelChange}>
+          {LEVEL.map(i => <option key={i.level} value={i.level}>{i.label}</option>)}
         </select>
         希望优先完成这个计划。因此，我承诺在计划日内：
       </p>
-      {todoCalendar.length > 0 && planData.total && planData.name && planData.unit ? (
-        <p className="plan">每天{planData.name} {Number(planData.total) / todoCalendar.length} {planData.unit}</p>
+      {planData.per && planData.name && planData.unit ? (
+        <p className="plan">每天{planData.name} {planData.per} {planData.unit}</p>
       ) : (
         <p className="plan tip">填写上述空格生成每日计划~</p>
       )}
     </div>
     <div className="footer">
       <div className="btn cancel" onClick={onClose}>我再想想</div>
-      <div className="btn confirm">我准备好啦~</div>
+      <div className="btn confirm" onClick={onConfirm}>我准备好啦~</div>
     </div>
     </Fragment>
   )

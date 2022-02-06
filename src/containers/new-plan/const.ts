@@ -35,3 +35,18 @@ export const WEEKLY = [
     selected: false,
   },
 ]
+
+export const LEVEL = [
+  {
+    level: 1,
+    label: '非常',
+  },
+  {
+    level: 2,
+    label: '一般',
+  },
+  {
+    level: 3,
+    label: '不太',
+  },
+]
