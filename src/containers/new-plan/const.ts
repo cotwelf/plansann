@@ -30,7 +30,7 @@ export const WEEKLY = [
     selected: false,
   },
   {
-    id: 7,
+    id: 0,
     name: '周日',
     selected: false,
   },
