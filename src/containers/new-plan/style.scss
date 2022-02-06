@@ -2,19 +2,40 @@
 .new-plan {
   * {
     display: inline-block;
+    font-size: 1rem;
   }
   input {
-    min-width: 11vw;
     padding: 0 2px;
     margin: 0 2px;
-    max-width: 36px;
+  }
+  p {
+    line-height: 2rem;
+  }
+  select {
+    width: 6rem;
+    padding: .3rem;
+    display: inline-flex;
+  }
+  .date-time {
+    width: 7rem;
+    display: inline-flex;
+    align-items: center;
+  }
+  .name {
+    width: 8rem;
+  }
+  .total {
+    width: 2.5rem;
+  }
+  .unit {
+    width: 2rem;
   }
   .weekly {
     border: 1px solid $color-red-light;
-    margin: 0 .5vw;
-    padding: 0 .5vw;
+    margin: 0 .5rem;
+    padding: .2rem .5rem;
     border-radius: 4px;
-    line-height: 5vw;
+    line-height: 1rem;
     &.selected {
       background-color: $color-red-light;
       color: white;
@@ -23,8 +44,8 @@
 }
 .modal.show.new-plan {
   .content {
-    width: 100vw;
-    height: 100vw;
+    width: 20rem;
+    height: 30rem;
     padding: 4vw;
   }
 }
