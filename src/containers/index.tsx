@@ -21,6 +21,7 @@ import { createProject, getProjects } from '../api'
 import { themeListApi } from "../api/test"
 import { toggleToast } from "../utils"
 import { updateProjects } from "../modules/projects"
+import '../api/mock'
 
 const mapStateToProps = (state: IRootState) => {
   const navInfo = state.nav.topNav
@@ -88,7 +89,6 @@ const TApp: React.FC = (props: any) => {
             getProjects().then((r: any) => {
               updateProjects(r)
             })
-            // changeNavColor(nextTheme)
             resolve(true)
           }
         })

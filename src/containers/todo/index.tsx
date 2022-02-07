@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import { TaskItem } from '../../components'
 import { connect } from "react-redux"
 import { IRootState } from "../../modules"
@@ -7,6 +7,7 @@ import { toggleModal } from "../../modules/modal"
 import { bindActionCreators } from "redux"
 import { changeNavColor } from "../../modules/nav"
 import { NewPlan } from "../new-plan"
+import { getPlanData } from "../../api/mock"
 
 const mapStateToProps = (state: IRootState) => {
   return {
@@ -29,8 +30,6 @@ const mapDispatchToProps = (dispatch: any) => bindActionCreators({
 
 export const TTodo: React.FC = ({ navInfo, toggleModal, themeColor, changeNavColor, location }: any) => {
   const onAddPlan = () => {
-    console.log(2233)
-
     toggleModal({
       title: '创建计划',
       noBtn: true,
@@ -40,6 +39,11 @@ export const TTodo: React.FC = ({ navInfo, toggleModal, themeColor, changeNavCol
       ),
     })
   }
+  useEffect(()=> {
+    fetch('/plans').then(r=>r.json()).then(r=>{
+      console.log(r)
+    })
+  },[])
   return (
     <React.Fragment>
       <div
