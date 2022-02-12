@@ -6,7 +6,7 @@ import { connect } from "react-redux"
 import { toggleModal } from "../../modules/modal"
 import { LEVEL, WEEKLY, WEEKLY_TYPE } from "./const"
 import './style.scss'
-import { durationDay, countWorkDays, toggleToast, countWorkWeeks } from "../../utils"
+import { weeklyNumberToObj, countWorkDays, toggleToast, countWorkWeeks, weeklyObjToNumber } from "../../utils"
 
 const getWeekArray = (weekObj: any) => {
   const weekArray: number[] = []
@@ -35,24 +35,32 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
     selected: item.id === weekOf
   })))
   const [weeklyType, setWeeklyType] = useState(WEEKLY_TYPE[0])
+  const [projectId, setProjectId] = useState(projects[0].id)
+  const [name, setName] = useState('')
+  const [total, setTotal] = useState('')
+  const [unit, setUnit] = useState('')
   const [planData, setPlanData] = useState({
-    projectId: projects[0].id,
-    name: '',
     per: 0,
-    unit: '',
-    weekly: 0,
+    weeklyArray: [moment(todayTs * 1000).day()],
     level: 1,
-    total: '',
     startAt: todayTs,
     finishAt: todayTs,
     status: 0,
   })
-  const checkAndSetWeekly = (start: number, end: number, weekly: number[], currentWeeklyObj: any) => {
-    if (countWorkDays(start, end, weekly).length === 0) {
-      toggleToast('请至少选择一天可以完成任务')
-      return
-    }
-    setCurrentWeekly(currentWeeklyObj)
+  // const [planData, setPlanData] = useState({
+  //   projectId: projects[0].id,
+  //   name: '',
+  //   per: 0,
+  //   unit: '',
+  //   weekly: 0,
+  //   level: 1,
+  //   total: '',
+  //   startAt: todayTs,
+  //   finishAt: todayTs,
+  //   status: 0,
+  // })
+  const hasWorkDays = (start: number, end: number, weekly: number[]) => {
+    return countWorkDays(start, end, weekly).length !== 0
   }
   const onChangeWeeklyType = () => {
     WEEKLY_TYPE.forEach((i, index) => {
@@ -64,14 +72,20 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
     })
   }
   const onWeekClick = (item: any) => {
-    const weeklyObj = currentWeekly
-    const newList = weeklyObj.map((i: any, index: number) => {
-      if (i.id === item.id) {
-        i.selected = !i.selected
-      }
-      return i
+    const newWeekly = planData.weeklyArray
+    if (planData.weeklyArray.indexOf(item.id) === -1) {
+      newWeekly.push(item.id)
+    } else {
+      newWeekly.splice(newWeekly.indexOf(item.id),1)
+    }
+    if (!hasWorkDays(planData.startAt, planData.finishAt, newWeekly)) {
+      toggleToast('请至少选择一天可以完成任务哦~')
+      return
+    }
+    setPlanData({
+      ...planData,
+      weeklyArray: newWeekly,
     })
-    setCurrentWeekly(newList)
   }
   const onClose = () => {
     setPlanData({
@@ -81,11 +95,6 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
     toggleModal({}, false)
   }
   const onConfirm = () => {
-    const {
-      name,
-      unit,
-      total,
-    } = planData
     if(!name) {
       toggleToast('你的计划菌还没有名字呢 qwq')
       return
@@ -102,10 +111,7 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
     // toggleModal({}, false)
   }
   const onProjectChange = (e: any) => {
-    setPlanData({
-      ...planData,
-      projectId: e.target.value,
-    })
+    setProjectId(e.target.value)
   }
   const onTimeChange = (key: string, e: any) => {
     if (moment(e.target.value).valueOf() < moment().valueOf()) {
@@ -114,6 +120,18 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
     }
     const thisTime: any = {}
     thisTime[key] = moment(e.target.value || (todayTs * 1000)).valueOf() / 1000
+    if(weeklyType === WEEKLY_TYPE[2]) {
+      const startAt = thisTime['startAt'] || planData.startAt
+      const finishAt = thisTime['finishAt'] || planData.finishAt
+      if (!hasWorkDays(startAt, finishAt, planData.weeklyArray)) {
+        console.log(startAt,'at', moment(startAt * 1000).day())
+        toggleToast('请至少选择一天可以完成任务哦~')
+        setPlanData({
+          ...planData,
+          weeklyArray: [moment(startAt * 1000).day()],
+        })
+      }
+    }
     const newData = {
       ...planData,
       ...thisTime,
@@ -132,34 +150,25 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
     setPlanData(newData)
   }
   const onNameChange = (e: any) => {
-    let name = e.target.value.replace(/\r?\n/g, '')
-    if (name.length >= 8) {
-      name = name.substring(0, 8)
+    let currentName = e.target.value.replace(/\r?\n/g, '')
+    if (currentName.length >= 8) {
+      currentName = currentName.substring(0, 8)
     }
-    setPlanData({
-      ...planData,
-      name,
-    })
+    setName(currentName)
   }
   const onTotalChange = (e: any) => {
-    let total = e.target.value
-    if (total.length >= 4) {
-      total = total.substring(0, 4)
+    let currentTotal = e.target.value
+    if (currentTotal.length >= 4) {
+      currentTotal = currentTotal.substring(0, 4)
     }
-    setPlanData({
-      ...planData,
-      total,
-    })
+    setTotal(currentTotal)
   }
   const onUnitChange = (e: any) => {
-    let unit = e.target.value.replace(/\r?\n/g, '')
-    if (unit.length >= 2) {
-      unit = unit.substring(0, 2)
+    let currentUnit = e.target.value.replace(/\r?\n/g, '')
+    if (currentUnit.length >= 2) {
+      currentUnit = currentUnit.substring(0, 2)
     }
-    setPlanData({
-      ...planData,
-      unit,
-    })
+    setUnit(currentUnit)
   }
   const onLevelChange = (e: any) => {
     setPlanData({
@@ -168,12 +177,12 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
     })
   }
   useEffect(() => {
-    // 设置 weekly 和 per
+    // 设置 per
     let weekly = 0
     let per = 0
     const getPer = (days: number = 1) => {
-      const total = Number(planData.total)
-      return (total * 100 % days) / 100
+      const CurrentTotal = Number(total)
+      return Math.ceil(CurrentTotal / days)
     }
     switch (weeklyType.type) {
       case WEEKLY_TYPE[1].type:
@@ -183,23 +192,17 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
         break
       case WEEKLY_TYPE[2].type:
         // 具体到每天
-        per = getPer(countWorkDays(planData.startAt, planData.finishAt, getWeekArray(currentWeekly)).length)
-        getWeekArray(currentWeekly).forEach((w, i) => {
-          weekly += w * Math.pow(10, i)
-        })
-        weekly += WEEKLY_TYPE[2].type / 10
-        console.log(weekly,weekly)
+        per = getPer(countWorkDays(planData.startAt, planData.finishAt, planData.weeklyArray).length)
         break
       default:
-        weekly = WEEKLY_TYPE[0].type
         per = getPer()
     }
       setPlanData({
         ...planData,
-        weekly,
         per,
       })
-  }, [currentWeekly, weeklyType, planData.startAt, planData.finishAt, planData.total])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentWeekly, weeklyType, planData.startAt, planData.finishAt, total])
   return (
     <Fragment>
       <div className='new-plan'>
@@ -228,10 +231,10 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
         {weeklyType === WEEKLY_TYPE[2] && (
           <Fragment>
           <span>，每周</span>
-          {currentWeekly.map(item => (
+          {WEEKLY.map(item => (
             <span
               key={item.id}
-              className={classNames('weekly', { selected: item.selected })}
+              className={classNames('weekly', { selected: planData.weeklyArray.includes(item.id) })}
               onClick={() => onWeekClick(item)}
             >{item.name}</span>
           ))}
@@ -240,26 +243,26 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
         )}
         <input
           className='name'
-          placeholder={planData.name ? '' : '背单词'}
-          value={planData.name}
+          placeholder={name ? '' : '背单词'}
+          value={name}
           onChange={onNameChange}
           onCompositionEnd={onNameChange}
           onCompositionStart={onNameChange}
         />
         <input
           className='total'
-          placeholder={planData.total ? '' : '300'}
-          value={planData.total}
+          placeholder={total ? '' : '300'}
+          value={total}
           onChange={onTotalChange}
           type='number'
         />
         <input
           className='unit'
-          placeholder={planData.unit ? '' : '个'}
-          value={planData.unit}
+          placeholder={unit ? '' : '个'}
+          value={unit}
           onChange={onUnitChange}
         />
-        <div className='change-weekly-type' onClick={onChangeWeeklyType}>「换个方式？」</div>
+        <span className='change-weekly-type' onClick={onChangeWeeklyType}>「换个方式？」</span>
       </p>
       <p>
         当有多个计划同时进行的时候，我
@@ -268,10 +271,10 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
         </select>
         希望优先完成这个计划。因此，我承诺在计划日内：
       </p>
-      {planData.per && planData.name && planData.unit ? (
+      {planData.per && name && unit ? (
         <p className="plan">
-          {weeklyType.description.replace('name', planData.name)
-            .replace('unit', planData.unit)
+          {weeklyType.description.replace('name', name)
+            .replace('unit', unit)
             .replace('per', planData.per.toString())
           }
         </p>

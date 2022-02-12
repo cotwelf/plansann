@@ -37,5 +37,17 @@ export const countWorkWeeks = (start: number, end: number) => {
     ...remain,
   ]
 }
-
+export const weeklyNumberToObj = (weeklyNumber: number) => {
+  const type = weeklyNumber * 10 % 10
+  const weekly = Math.floor(weeklyNumber).toString().split('').map(i=>Number(i))
+  return {type, weekly}
+}
+export const weeklyObjToNumber = ({ type, weekly }: any) => {
+  let weeklyNumber = 0
+  weekly.forEach((w: number, i: number) => {
+    weeklyNumber += w * Math.pow(10, i)
+  })
+  weeklyNumber += type / 10
+  return weeklyNumber
+}
 export const durationDay = (startS: number, endS: number) => moment(endS * 1000).diff(moment(startS * 1000), 'days') + 1
