@@ -1,4 +1,4 @@
-// TODO: 此目录是 add record 方式完成任务的，比较简单 orz
+// TODO: 此目录是计划表方式完成任务的，比较复杂
 export const WEEKLY = [
   {
     id: 1,
