@@ -6,7 +6,17 @@ import { connect } from "react-redux"
 import { toggleModal } from "../../modules/modal"
 import { LEVEL, WEEKLY, WEEKLY_TYPE } from "./const"
 import './style.scss'
-import { durationDay, countWorkDays, toggleToast } from "../../utils"
+import { durationDay, countWorkDays, toggleToast, countWorkWeeks } from "../../utils"
+
+const getWeekArray = (weekObj: any) => {
+  const weekArray: number[] = []
+  weekObj.filter((i: { selected: boolean }) => i.selected === true).forEach((i: { id: number }) => {
+    weekArray.push(i.id)
+  })
+  return weekArray.reverse()
+}
+
+
 const mapStateToProps = (state: any) => {
   console.log(state)
   return ({
@@ -37,6 +47,13 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
     finishAt: todayTs,
     status: 0,
   })
+  const checkAndSetWeekly = (start: number, end: number, weekly: number[], currentWeeklyObj: any) => {
+    if (countWorkDays(start, end, weekly).length === 0) {
+      toggleToast('请至少选择一天可以完成任务')
+      return
+    }
+    setCurrentWeekly(currentWeeklyObj)
+  }
   const onChangeWeeklyType = () => {
     WEEKLY_TYPE.forEach((i, index) => {
       if (weeklyType.type === i.type) {
@@ -47,12 +64,9 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
     })
   }
   const onWeekClick = (item: any) => {
-    const newItem = {
-      ...item,
-      selected: !item.selected,
-    }
-    const newList = currentWeekly.map((i: any, index: number) => {
-      if (i.id === newItem.id) {
+    const weeklyObj = currentWeekly
+    const newList = weeklyObj.map((i: any, index: number) => {
+      if (i.id === item.id) {
         i.selected = !i.selected
       }
       return i
@@ -153,56 +167,38 @@ const TNewPlan: React.FC = ({ toggleModal, projects }: any) => {
       level: e.target.value,
     })
   }
-  // useEffect(() => {
-  //   console.log(planData.weekly)
-  //   let weekly = 0
-
-  //   let calendar: any = countWorkDays(planData.startAt, planData.finishAt, planData.weekly)
-  //   if (calendar.length === 0) {
-  //     toggleToast('请至少选择一天可以完成任务')
-  //     calendar = [planData.startAt]
-  //     const weekOf = moment(planData.startAt * 1000).day()
-  //     setPlanData({
-  //       ...planData,
-  //       weekly,
-  //     })
-  //     currentWeekly.forEach(i => {
-  //       if (i.id === weekOf) {
-  //         i.selected = true
-  //       }
-  //     })
-  //     setCurrentWeekly(currentWeekly)
-  //   }
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [planData.startAt, planData.finishAt, weeklyType, currentWeekly])
   useEffect(() => {
     // 设置 weekly 和 per
-    // if(weeklyType.type === WEEKLY_TYPE[0].type){
-    //   setPlanData({
-    //     ...planData,
-    //     weekly: 0,
-    //   })
-    // }
     let weekly = 0
     let per = 0
+    const getPer = (days: number = 1) => {
+      const total = Number(planData.total)
+      return (total * 100 % days) / 100
+    }
     switch (weeklyType.type) {
       case WEEKLY_TYPE[1].type:
         // 具体到每周
-        // weekly =
+        weekly = countWorkWeeks(planData.startAt, planData.finishAt).length
+        per = getPer(weekly)
         break
       case WEEKLY_TYPE[2].type:
         // 具体到每天
-        const weekArray: number[] = []
-        currentWeekly.filter(i => i.selected === true).forEach(i => {
-          weekArray.push(i.id)
+        per = getPer(countWorkDays(planData.startAt, planData.finishAt, getWeekArray(currentWeekly)).length)
+        getWeekArray(currentWeekly).forEach((w, i) => {
+          weekly += w * Math.pow(10, i)
         })
-        const workDays = countWorkDays(planData.startAt, planData.finishAt, weekArray)
-        console.log(workDays,'workDays')
+        weekly += WEEKLY_TYPE[2].type / 10
+        console.log(weekly,weekly)
         break
       default:
         weekly = WEEKLY_TYPE[0].type
-        per = Number(planData.total)
+        per = getPer()
     }
+      setPlanData({
+        ...planData,
+        weekly,
+        per,
+      })
   }, [currentWeekly, weeklyType, planData.startAt, planData.finishAt, planData.total])
   return (
     <Fragment>
