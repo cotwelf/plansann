@@ -1,12 +1,22 @@
 import moment from "moment"
+import { PLAN_WEEKLY_TYPE } from "."
 
 export const toggleToast = (message: any) => {
-  const toast = document.createElement('div')
-  toast.classList.add('toast')
-  toast.innerHTML = message
-  document.body.appendChild(toast)
+  let toastBox = document.getElementsByClassName('toast')[0]
+  if (!toastBox) {
+    toastBox = document.createElement('div')
+    toastBox.classList.add('toast')
+    document.body.appendChild(toastBox)
+  }
+  const text = document.createElement('div')
+  text.classList.add('message')
+  text.innerHTML = message
+  toastBox.appendChild(text)
   setTimeout(()=> {
-    document.body.removeChild(toast)
+    toastBox.removeChild(text)
+    if (toastBox.childNodes.length === 0) {
+      document.body.removeChild(toastBox)
+    }
   }, 3000)
 }
 
@@ -44,10 +54,15 @@ export const weeklyNumberToObj = (weeklyNumber: number) => {
 }
 export const weeklyObjToNumber = ({ type, weekly }: any) => {
   let weeklyNumber = 0
-  weekly.forEach((w: number, i: number) => {
-    weeklyNumber += w * Math.pow(10, i)
-  })
-  weeklyNumber += type / 10
+  if (type === PLAN_WEEKLY_TYPE[2].type) {
+    weekly.forEach((w: number, i: number) => {
+      weeklyNumber += w * Math.pow(10, i)
+    })
+    weeklyNumber += type / 10
+  } else {
+    weeklyNumber = type
+  }
   return weeklyNumber
 }
+
 export const durationDay = (startS: number, endS: number) => moment(endS * 1000).diff(moment(startS * 1000), 'days') + 1
